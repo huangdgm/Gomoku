@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * 1. Who win the game? 2. Is it black's turn for the current chess point? 3. Game over or not?
  *
- * @author xfn
+ * @author Dong Huang
  */
 public class Judge {
 

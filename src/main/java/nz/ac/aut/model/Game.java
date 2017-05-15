@@ -10,231 +10,258 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The Game class serves as the controller of the whole game. It
- * defines the process of the game and validate the user input.
- * 
+ * The Game class serves as the controller of the whole game. It defines the process of the game and validate the user
+ * input.
+ *
  * @author Dong Huang
  */
 public class Game {
-	ChessBoard chessBoard = null;
-	Judge judge = null;
-        ArrayList<ChessPoint> chessPointCollection = null;
-	FileIO fileIO = null;
 
-	/**
-	 * A GomokuGameController consists of 4 elements: 1. ChessBoard; 2. A
-	 * collection of ChessPoint; 3. A judge; 4. A FileIO.
-	 */
-	public Game(ChessBoard chessBoard, Judge judge, FileIO fileIO) {
-		super();
-                
-		this.chessBoard = chessBoard;
-                this.chessPointCollection = chessBoard.getChessPointCollection();
-		this.judge = judge;
-		this.fileIO = fileIO;
-	}
+    private ChessBoard chessBoard = null;
+    private Judge judge = null;
+    private ArrayList<ChessPoint> chessPointCollection = null;
+    private FileIO fileIO = null;
+    private GameEventListener gameEventListener = null;
 
-	/**
-	 * The main process the game should follow.
-	 */
-	public void startGame() {
-		Scanner scanner = new Scanner(System.in);
+    /**
+     * A GomokuGameController consists of 4 elements: 1. ChessBoard; 2. A collection of ChessPoint; 3. A judge; 4. A
+     * FileIO.
+     */
+    public Game(ChessBoard chessBoard, Judge judge, FileIO fileIO) {
+        super();
 
-		printWelcomeMessage();
-		printOptionMessage();
+        this.chessBoard = chessBoard;
+        this.chessPointCollection = chessBoard.getChessPointCollection();
+        this.judge = judge;
+        this.fileIO = fileIO;
+    }
 
-		initializeGame(scanner);
-		playGame(scanner);
+    /**
+     * The main process the game should follow.
+     */
+    public void startGame() {
+        Scanner scanner = new Scanner(System.in);
 
-		scanner.close();
-	}
+        printWelcomeMessage();
+        printOptionMessage();
 
-	private void printOptionMessage() {
-		System.out.println("Choose your option?");
-		System.out.println("1. Start a new game");
-		System.out.println("2. Load a history game");
-	}
+        initializeGame(scanner);
+        playGame(scanner);
 
-	/**
-	 * After the game has been initialized, the game starts and the playGame
-	 * method controls the process of the game. Each color plays alternatively.
-	 * After each chess point, the judge checks whether it is game over. If it
-	 * is game over, the judge can tell which color win the game.
-	 * 
-	 * @param scanner
-	 */
-	private void playGame(Scanner scanner) {
-		ChessPoint currentChessPoint = null;
+        scanner.close();
+    }
 
-		do {
-			chessBoard.drawChessBoard();
+    private void printOptionMessage() {
+        System.out.println("Choose your option?");
+        System.out.println("1. Start a new game");
+        System.out.println("2. Load a history game");
+    }
 
-			if (judge.isBlackTurn()) {
-				currentChessPoint = readChessPoint(scanner, ChessColor.BLACK);
-				judge.setBlackTurn(false);
-			} else {
-				currentChessPoint = readChessPoint(scanner, ChessColor.WHITE);
-				judge.setBlackTurn(true);
-			}
+    /**
+     * After the game has been initialized, the game starts and the playGame method controls the process of the game.
+     * Each color plays alternatively. After each chess point, the judge checks whether it is game over. If it is game
+     * over, the judge can tell which color win the game.
+     *
+     * @param scanner
+     */
+    private void playGame(Scanner scanner) {
+        ChessPoint currentChessPoint = null;
 
-			chessPointCollection.add(currentChessPoint);
-			chessBoard.setChessPointCollection(chessPointCollection);
-			judge.setChessPointCollection(chessPointCollection);
-		} while (!judge.isGameOver(currentChessPoint));
+        do {
+            chessBoard.drawChessBoard();
 
-		chessBoard.drawChessBoard();
+            if (judge.isBlackTurn()) {
+                currentChessPoint = readChessPoint(scanner, ChessColor.BLACK);
+                judge.setBlackTurn(false);
+            } else {
+                currentChessPoint = readChessPoint(scanner, ChessColor.WHITE);
+                judge.setBlackTurn(true);
+            }
 
-		System.out.print("\nGame Over...");
+            chessPointCollection.add(currentChessPoint);
+            chessBoard.setChessPointCollection(chessPointCollection);
+            judge.setChessPointCollection(chessPointCollection);
+        } while (!judge.isGameOver(currentChessPoint));
 
-		if (judge.isBlackWin()) {
-			System.out.println("BLACK wins!");
-		} else {
-			System.out.println("WHITE wins!");
-		}
-	}
+        chessBoard.drawChessBoard();
 
-	/**
-	 * Initialize the game by prompting the user whether the user want to start
-	 * a new game or load history progress information. If the user want to load
-	 * history progress information, then the desired text file will be loaded
-	 * and be used to populate the chess board. Also, it validates the user
-	 * input.
-	 */
-	private void initializeGame(Scanner scanner) {
-		String optionNumber = null;
+        System.out.print("\nGame Over...");
 
-		do {
-			optionNumber = scanner.next().replaceAll("\\s+", " ").trim();
+        if (judge.isBlackWin()) {
+            System.out.println("BLACK wins!");
+        } else {
+            System.out.println("WHITE wins!");
+        }
+    }
 
-			if (optionNumber.equals("2")) {
-				File[] files = fileIO.listFiles();
-				int index = 0;
+    /**
+     * Initialize the game by prompting the user whether the user want to start a new game or load history progress
+     * information. If the user want to load history progress information, then the desired text file will be loaded and
+     * be used to populate the chess board. Also, it validates the user input.
+     */
+    private void initializeGame(Scanner scanner) {
+        String optionNumber = null;
 
-				do {
-					System.out.print("\nChoose a history file: ");
+        do {
+            optionNumber = scanner.next().replaceAll("\\s+", " ").trim();
 
-					while (!scanner.hasNextInt()) {
-						scanner.next();
-						System.out.println("\nInvalid choice...Please input an integer.");
-						System.out.print("\nChoose a history file: ");
-					}
+            if (optionNumber.equals("2")) {
+                File[] files = fileIO.listFiles();
+                int index = 0;
 
-					index = scanner.nextInt();
+                do {
+                    System.out.print("\nChoose a history file: ");
 
-					if (index <= 0 || index >= files.length + 1) {
-						System.out.println("\nInvalid choice...Please Please input an integer between 1 and " + files.length);
-					}
-				} while (index <= 0 || index >= files.length + 1);
+                    while (!scanner.hasNextInt()) {
+                        scanner.next();
+                        System.out.println("\nInvalid choice...Please input an integer.");
+                        System.out.print("\nChoose a history file: ");
+                    }
 
-				fileIO.readProgress(files[index - 1].getPath());
-			} else if (!optionNumber.equals("1")) {
-				System.out.println("\nInvalid choice...Please select again");
-			}
-		} while (!optionNumber.equals("1") && !optionNumber.equals("2"));
-	}
+                    index = scanner.nextInt();
 
-	private void printWelcomeMessage() {
-		System.out.println("\t\tWelcome to the GOMOKU world\n");
-		System.out.println("Rules:\n");
-		System.out.println("1. One player plays the BLACK, the other player plays the WHITE;\n");
-		System.out.println("2. BLACK plays first;\n");
-		System.out.println("3. The player who first places five points in a line win the game.\n");
-	}
+                    if (index <= 0 || index >= files.length + 1) {
+                        System.out.println("\nInvalid choice...Please Please input an integer between 1 and " + files.length);
+                    }
+                } while (index <= 0 || index >= files.length + 1);
 
-	/**
-	 * Read a valid chess point by prompting the user with the proper message.
-	 * 
-	 * @param scanner
-	 * @param chessColor
-	 * @return The chess point which the player just plays.
-	 */
-	private ChessPoint readChessPoint(Scanner scanner, ChessColor chessColor) {
-		ChessPoint currentChessPoint = null;
-		int x = 0;
-		int y = 0;
+                fileIO.readProgress(files[index - 1].getPath());
+            } else if (!optionNumber.equals("1")) {
+                System.out.println("\nInvalid choice...Please select again");
+            }
+        } while (!optionNumber.equals("1") && !optionNumber.equals("2"));
+    }
 
-		do {
-			if (currentChessPoint != null) {
-				System.out.println("Invalid position...please try again (0,0) ~ (15,15).");
-			}
+    private void printWelcomeMessage() {
+        System.out.println("\t\tWelcome to the GOMOKU world\n");
+        System.out.println("Rules:\n");
+        System.out.println("1. One player plays the BLACK, the other player plays the WHITE;\n");
+        System.out.println("2. BLACK plays first;\n");
+        System.out.println("3. The player who first places five points in a line win the game.\n");
+    }
 
-			if (judge.isBlackTurn()) {
-				System.out.println("\nEnter the position (BLACK).");
-			} else {
-				System.out.println("\nEnter the position (WHITE).");
-			}
+    /**
+     * Read a valid chess point by prompting the user with the proper message.
+     *
+     * @param scanner
+     * @param chessColor
+     * @return The chess point which the player just plays.
+     */
+    private ChessPoint readChessPoint(Scanner scanner, ChessColor chessColor) {
+        ChessPoint currentChessPoint = null;
+        int x = 0;
+        int y = 0;
 
-			System.out.print("x: ");
-			x = readNumber(scanner);
+        do {
+            if (currentChessPoint != null) {
+                System.out.println("Invalid position...please try again (0,0) ~ (15,15).");
+            }
 
-			System.out.print("y: ");
-			y = readNumber(scanner);
+            if (judge.isBlackTurn()) {
+                System.out.println("\nEnter the position (BLACK).");
+            } else {
+                System.out.println("\nEnter the position (WHITE).");
+            }
 
-			currentChessPoint = new ChessPoint(x, y, chessColor);
-		} while (!judge.isChessPointValid(currentChessPoint));
+            System.out.print("x: ");
+            x = readNumber(scanner);
 
-		return currentChessPoint;
-	}
+            System.out.print("y: ");
+            y = readNumber(scanner);
 
-	/**
-	 * Read a integer number from the user input and return this integer number,
-	 * or just exist the program if the user chooses to quit.
-	 * 
-	 * @param scanner
-	 * 
-	 * @return The integer number of user input or just exist the program if the
-	 *         user wants to quit the game.
-	 */
-	private int readNumber(Scanner scanner) {
-		String input = null;
-		int result = 0;
+            currentChessPoint = new ChessPoint(x, y, chessColor);
+        } while (!judge.isChessPointValid(currentChessPoint));
 
-		do {
-			input = scanner.next().trim();
+        return currentChessPoint;
+    }
 
-			if (input.equalsIgnoreCase("quit")) {
-				System.out.println("Your progress is saved successfully. Goodbye");
-				fileIO.saveProgress();
-				System.exit(0);
-			} else if (input.matches("[0-9]+")) {
-				result = Integer.valueOf(input);
-			} else {
-				System.out.print("Invalid position...Please input an integer: ");
-			}
-		} while (!input.matches("[0-9]+"));
+    /**
+     * Read a integer number from the user input and return this integer number, or just exist the program if the user
+     * chooses to quit.
+     *
+     * @param scanner
+     *
+     * @return The integer number of user input or just exist the program if the user wants to quit the game.
+     */
+    private int readNumber(Scanner scanner) {
+        String input = null;
+        int result = 0;
 
-		return result;
-	}
+        do {
+            input = scanner.next().trim();
 
-	public ChessBoard getChessBoard() {
-		return chessBoard;
-	}
+            if (input.equalsIgnoreCase("quit")) {
+                System.out.println("Your progress is saved successfully. Goodbye");
+                fileIO.saveProgress();
+                System.exit(0);
+            } else if (input.matches("[0-9]+")) {
+                result = Integer.valueOf(input);
+            } else {
+                System.out.print("Invalid position...Please input an integer: ");
+            }
+        } while (!input.matches("[0-9]+"));
 
-	public ArrayList<ChessPoint> getChessPointCollection() {
-		return chessPointCollection;
-	}
+        return result;
+    }
 
-	public Judge getJudge() {
-		return judge;
-	}
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
 
-	public FileIO getFileIO() {
-		return fileIO;
-	}
+    public ArrayList<ChessPoint> getChessPointCollection() {
+        return chessPointCollection;
+    }
 
-	public void setChessBoard(ChessBoard chessBoard) {
-		this.chessBoard = chessBoard;
-	}
+    public Judge getJudge() {
+        return judge;
+    }
 
-	public void setChessPointCollection(ArrayList<ChessPoint> chessPointCollection) {
-		this.chessPointCollection = chessPointCollection;
-	}
+    public FileIO getFileIO() {
+        return fileIO;
+    }
 
-	public void setJudge(Judge judge) {
-		this.judge = judge;
-	}
+    public void setChessBoard(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
+    }
 
-	public void setFileIO(FileIO fileIO) {
-		this.fileIO = fileIO;
-	}
+    public void setChessPointCollection(ArrayList<ChessPoint> chessPointCollection) {
+        this.chessPointCollection = chessPointCollection;
+    }
+
+    public void setJudge(Judge judge) {
+        this.judge = judge;
+    }
+
+    public void setFileIO(FileIO fileIO) {
+        this.fileIO = fileIO;
+    }
+
+    public void createNewGame() {
+        chessPointCollection.clear();
+        chessBoard.setChessPointCollection(chessPointCollection);
+        judge.setChessPointCollection(chessPointCollection);
+        judge.setBlackTurn(true);
+        judge.setBlackWin(false);
+        judge.setGameOver(false);
+        
+        notifyGameEventListener();
+    }
+
+    private void notifyGameEventListener() {
+        getGameEventListener().gameStateChanged();
+    }
+    
+    /**
+     * @return the gameEventListener
+     */
+    public GameEventListener getGameEventListener() {
+        return gameEventListener;
+    }
+
+    /**
+     * @param gameEventListener the gameEventListener to set
+     */
+    public void setGameEventListener(GameEventListener gameEventListener) {
+        this.gameEventListener = gameEventListener;
+    }
 }
