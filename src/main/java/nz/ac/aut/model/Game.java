@@ -17,18 +17,19 @@ import java.util.Scanner;
  */
 public class Game {
 	ChessBoard chessBoard = null;
-	ArrayList<ChessPoint> chessPointCollection = null;
 	Judge judge = null;
+        ArrayList<ChessPoint> chessPointCollection = null;
 	FileIO fileIO = null;
 
 	/**
 	 * A GomokuGameController consists of 4 elements: 1. ChessBoard; 2. A
 	 * collection of ChessPoint; 3. A judge; 4. A FileIO.
 	 */
-	public Game(ChessBoard chessBoard, ArrayList<ChessPoint> chessPointCollection, Judge judge, FileIO fileIO) {
+	public Game(ChessBoard chessBoard, Judge judge, FileIO fileIO) {
 		super();
+                
 		this.chessBoard = chessBoard;
-		this.chessPointCollection = chessPointCollection;
+                this.chessPointCollection = chessBoard.getChessPointCollection();
 		this.judge = judge;
 		this.fileIO = fileIO;
 	}

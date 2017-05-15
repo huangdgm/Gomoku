@@ -35,7 +35,7 @@ import nz.ac.aut.model.Judge;
  * This is the Entry point class of the game. A whole gomoku game consists of
  * the following elements:
  * 
- * 1. A chess point collection 2. A chess board 3. A judge 4. A file io
+ * 1. A chess board 2. A judge 3. A file IO
  * controller
  * 
  * It instantiates the chessPointCollection, chessBoard, judge and fileIO and
@@ -53,7 +53,7 @@ public class Gomoku {
 		Judge judge = new Judge(chessPointCollection);
 		FileIO fileIO = new FileIO(chessPointCollection);
 
-		Game gomoku = new Game(chessBoard, chessPointCollection, judge, fileIO);
+		Game gomoku = new Game(chessBoard, judge, fileIO);
 
 		gomoku.startGame();
 	}
