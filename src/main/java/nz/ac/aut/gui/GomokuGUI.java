@@ -32,18 +32,47 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlContent = new javax.swing.JPanel();
+        pnlControl = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        pnlChessBoard = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        pnlContent.setLayout(new java.awt.BorderLayout());
+
+        pnlControl.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlControl.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setText("jButton1");
+        pnlControl.add(jButton1, new java.awt.GridBagConstraints());
+
+        jButton2.setText("jButton2");
+        pnlControl.add(jButton2, new java.awt.GridBagConstraints());
+
+        jButton3.setText("jButton3");
+        pnlControl.add(jButton3, new java.awt.GridBagConstraints());
+
+        pnlContent.add(pnlControl, java.awt.BorderLayout.LINE_START);
+
+        pnlChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout pnlChessBoardLayout = new javax.swing.GroupLayout(pnlChessBoard);
+        pnlChessBoard.setLayout(pnlChessBoardLayout);
+        pnlChessBoardLayout.setHorizontalGroup(
+            pnlChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 527, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        pnlChessBoardLayout.setVerticalGroup(
+            pnlChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 563, Short.MAX_VALUE)
         );
+
+        pnlContent.add(pnlChessBoard, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -111,5 +140,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
     Game game;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JPanel pnlChessBoard;
+    private javax.swing.JPanel pnlContent;
+    private javax.swing.JPanel pnlControl;
     // End of variables declaration//GEN-END:variables
 }
