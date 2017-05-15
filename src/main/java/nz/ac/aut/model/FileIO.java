@@ -22,7 +22,7 @@ import java.util.Date;
  * information to a text file and loading the progress information from a text
  * file.
  * 
- * @author xfn
+ * @author Dong Huang
  */
 public class FileIO {
 	private ArrayList<ChessPoint> chessPointCollection;

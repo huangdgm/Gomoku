@@ -7,9 +7,8 @@ package nz.ac.aut.model;
 
 /**
  *
- * @author xfn
+ * @author Dong Huang
  */
 public enum Direction {
-	EAST, SOUTH, WEST, NORTH, EAST_NORTH, EAST_SOUTH, WEST_SOUTH, WEST_NORTH
+    EAST, SOUTH, WEST, NORTH, EAST_NORTH, EAST_SOUTH, WEST_SOUTH, WEST_NORTH
 }
-

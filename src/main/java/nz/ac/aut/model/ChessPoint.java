@@ -9,7 +9,7 @@ package nz.ac.aut.model;
  * The ChessPoint consists of the chess point attributes - coordinate and the
  * chess color.
  *
- * @author xfn
+ * @author Dong Huang
  */
 public class ChessPoint {
 

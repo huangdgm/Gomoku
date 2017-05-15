@@ -42,7 +42,7 @@ import nz.ac.aut.model.Judge;
  * pass these parameters to the GomokuGameController from which the game can be
  * launched.
  *
- * @author xfn
+ * @author Dong Huang
  */
 public class Gomoku {
 

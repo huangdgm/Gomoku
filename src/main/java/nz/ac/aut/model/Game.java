@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The GomokuGameController class serves as the controller of the whole game. It
+ * The Game class serves as the controller of the whole game. It
  * defines the process of the game and validate the user input.
  * 
- * @author xfn
+ * @author Dong Huang
  */
 public class Game {
 	ChessBoard chessBoard = null;

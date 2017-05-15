@@ -31,8 +31,7 @@ public class ChessBoard {
      * Draw the ASCII representation of the chess board based on the distribution of the current chess point collection.
      */
     public void drawChessBoard() {
-        // The string builder serves as the string builder to print the whole
-        // chess board.
+        // The string builder serves as the string builder to print the whole chess board.
         StringBuilder sb = new StringBuilder();
         // The collection of chess points in a specific line.
         ArrayList<ChessPoint> chessPointsInARow = new ArrayList<ChessPoint>();
