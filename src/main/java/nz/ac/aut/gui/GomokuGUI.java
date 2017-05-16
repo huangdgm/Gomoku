@@ -5,9 +5,11 @@
  */
 package nz.ac.aut.gui;
 
+import java.awt.GridLayout;
 import javax.swing.JOptionPane;
 import nz.ac.aut.model.GameEventListener;
 import nz.ac.aut.model.Game;
+import nz.ac.aut.model.ChessBoard;
 
 /**
  *
@@ -18,9 +20,12 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     /**
      * Creates new form GomokuGUI
      */
-    public GomokuGUI() {
+    public GomokuGUI(Game game) {
+        this.game = game;
+
         initComponents();
-        
+        initializeChessBoard();
+
         game.setGameEventListener(this);
     }
 
@@ -32,85 +37,79 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlContent = new javax.swing.JPanel();
-        pnlControl = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        pnlChessBoard = new javax.swing.JPanel();
+        panelContent = new javax.swing.JPanel();
+        panelControl = new javax.swing.JPanel();
+        scoreBlack = new javax.swing.JLabel();
+        scoreWhite = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        panelChessBoard = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gomoku");
 
-        pnlContent.setLayout(new java.awt.BorderLayout());
+        panelContent.setLayout(new java.awt.BorderLayout());
 
-        pnlControl.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        pnlControl.setLayout(new java.awt.GridBagLayout());
+        scoreBlack.setText("jLabel1");
 
-        jButton1.setText("jButton1");
-        pnlControl.add(jButton1, new java.awt.GridBagConstraints());
+        scoreWhite.setText("jLabel2");
 
-        jButton2.setText("jButton2");
-        pnlControl.add(jButton2, new java.awt.GridBagConstraints());
+        jLabel3.setText(":");
 
-        jButton3.setText("jButton3");
-        pnlControl.add(jButton3, new java.awt.GridBagConstraints());
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("jLabel1");
 
-        pnlContent.add(pnlControl, java.awt.BorderLayout.LINE_START);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("jLabel2");
 
-        pnlChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout pnlChessBoardLayout = new javax.swing.GroupLayout(pnlChessBoard);
-        pnlChessBoard.setLayout(pnlChessBoardLayout);
-        pnlChessBoardLayout.setHorizontalGroup(
-            pnlChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 527, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelControlLayout = new javax.swing.GroupLayout(panelControl);
+        panelControl.setLayout(panelControlLayout);
+        panelControlLayout.setHorizontalGroup(
+            panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelControlLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scoreBlack)
+                .addGap(141, 141, 141)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
+                .addComponent(scoreWhite)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        pnlChessBoardLayout.setVerticalGroup(
-            pnlChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 563, Short.MAX_VALUE)
+        panelControlLayout.setVerticalGroup(
+            panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scoreBlack))
+            .addGroup(panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(scoreWhite)
+                .addComponent(jLabel3))
         );
 
-        pnlContent.add(pnlChessBoard, java.awt.BorderLayout.CENTER);
+        panelContent.add(panelControl, java.awt.BorderLayout.PAGE_END);
 
-        getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
+        panelChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout panelChessBoardLayout = new javax.swing.GroupLayout(panelChessBoard);
+        panelChessBoard.setLayout(panelChessBoardLayout);
+        panelChessBoardLayout.setHorizontalGroup(
+            panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 526, Short.MAX_VALUE)
+        );
+        panelChessBoardLayout.setVerticalGroup(
+            panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 658, Short.MAX_VALUE)
+        );
+
+        panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(panelContent, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GomokuGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GomokuGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GomokuGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GomokuGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GomokuGUI().setVisible(true);
-            }
-        });
-    }
 
     @Override
     public void gameStateChanged() {
@@ -135,16 +134,29 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     }
 
     private void update() {
-        
+
     }
 
-    Game game;
+    private void initializeChessBoard() {
+        panelChessBoard.setLayout(new GridLayout(ChessBoard.NUM_OF_ROWS, ChessBoard.NUM_OF_COLS));
+
+        for (int row = 0; row < ChessBoard.NUM_OF_ROWS; row++) {
+            for (int col = 0; col < ChessBoard.NUM_OF_COLS; col++) {
+                panelChessBoard.add(new ChessPointPanel());
+            }
+        }
+    }
+
+    private Game game;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JPanel pnlChessBoard;
-    private javax.swing.JPanel pnlContent;
-    private javax.swing.JPanel pnlControl;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel panelChessBoard;
+    private javax.swing.JPanel panelContent;
+    private javax.swing.JPanel panelControl;
+    private javax.swing.JLabel scoreBlack;
+    private javax.swing.JLabel scoreWhite;
     // End of variables declaration//GEN-END:variables
 }

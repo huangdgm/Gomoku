@@ -19,18 +19,18 @@ public class Judge {
     private boolean isBlackTurn;
     private boolean isBlackWin;
     private boolean gameOver;
-    private ArrayList<ChessPoint> chessPointCollection;
+    private ChessBoard chessBoard;
 
-    // All the information the judge should know to control the game is the distribution of current chess points.
-    public Judge(ArrayList<ChessPoint> chessPointCollection) {
+    // To control the game, all the information the judge should know is the current chess board.
+    public Judge(ChessBoard chessBoard) {
         // According to Gomoku's rule, black player comes first
         isBlackTurn = true;
 
         // At the beginning of the game, no player wins the game.
-        setBlackWin(false);
+        isBlackWin = false;
         gameOver = false;
 
-        this.chessPointCollection = chessPointCollection;
+        this.chessBoard = chessBoard;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Judge {
         int xPositionOfChessPoint;
         int yPositionOfChessPoint;
 
-        for (ChessPoint chessPoint : chessPointCollection) {
+        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
             if (chessPoint != null) {
                 xPositionOfChessPoint = chessPoint.getX();
                 yPositionOfChessPoint = chessPoint.getY();
@@ -273,7 +273,7 @@ public class Judge {
         int yPositionOfChessPoint;
         ChessColor colorOfChessPoint;
 
-        for (ChessPoint chessPoint : chessPointCollection) {
+        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
             if (chessPoint != null) {
                 xPositionOfChessPoint = chessPoint.getX();
                 yPositionOfChessPoint = chessPoint.getY();
@@ -296,20 +296,12 @@ public class Judge {
         return gameOver;
     }
 
-    public ArrayList<ChessPoint> getChessPointCollection() {
-        return chessPointCollection;
-    }
-
     public void setBlackTurn(boolean isBlackTurn) {
         this.isBlackTurn = isBlackTurn;
     }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
-    }
-
-    public void setChessPointCollection(ArrayList<ChessPoint> chessPointCollection) {
-        this.chessPointCollection = chessPointCollection;
     }
 
     public boolean isBlackWin() {

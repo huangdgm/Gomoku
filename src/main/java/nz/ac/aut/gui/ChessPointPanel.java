@@ -26,19 +26,25 @@ public class ChessPointPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        chessPointLabel = new javax.swing.JLabel();
+
+        chessPointLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/chesspointimage.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(chessPointLabel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(chessPointLabel)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel chessPointLabel;
     // End of variables declaration//GEN-END:variables
 }
