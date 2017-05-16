@@ -16,9 +16,8 @@ import java.util.Scanner;
  */
 public class Game {
 
-    private ChessBoard chessBoard = null;
+    private ChessBoard chessBoard;
     private Judge judge;
-    private ArrayList<ChessPoint> chessPointCollection;
     private GameEventListener gameEventListener;
 
     /**
@@ -26,6 +25,7 @@ public class Game {
      */
     public Game() {
         super();
+
         createNewGame();
     }
 
@@ -66,16 +66,17 @@ public class Game {
      * @param chessColor
      * @return The chess point which the player just plays.
      */
-    private ChessPoint readChessPoint() {
-        return null;
+    public void placeChessPoint(ChessPoint cp) {
+        chessBoard.getChessPointCollection().add(cp);
+
+        // Check who should play the next chess point after playing the current chess point on the chess board, 
+        judge.setBlackTurn(cp.getChessColor() == ChessColor.BLACK ? false : true);
+
+        notifyGameEventListener();
     }
 
     public ChessBoard getChessBoard() {
         return chessBoard;
-    }
-
-    public ArrayList<ChessPoint> getChessPointCollection() {
-        return chessPointCollection;
     }
 
     public Judge getJudge() {
@@ -86,17 +87,16 @@ public class Game {
         this.chessBoard = chessBoard;
     }
 
-    public void setChessPointCollection(ArrayList<ChessPoint> chessPointCollection) {
-        this.chessPointCollection = chessPointCollection;
-    }
-
     public void setJudge(Judge judge) {
         this.judge = judge;
     }
 
     public void createNewGame() {
         // Create a new empty chess point collection
-        chessPointCollection = new ArrayList<ChessPoint>();
+        ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
+
+        chessPointCollection.add(new ChessPoint(2, 3, ChessColor.BLACK));
+        chessPointCollection.add(new ChessPoint(5, 6, ChessColor.WHITE));
 
         // Create a new chess board based on the empty chess point collection
         chessBoard = new ChessBoard(chessPointCollection);

@@ -5,6 +5,9 @@
  */
 package nz.ac.aut.gui;
 
+import nz.ac.aut.model.ChessColor;
+import nz.ac.aut.model.Game;
+
 /**
  *
  * @author xfn
@@ -14,7 +17,11 @@ public class ChessPointPanel extends javax.swing.JPanel {
     /**
      * Creates new form ChessPointPanel
      */
-    public ChessPointPanel() {
+    public ChessPointPanel(Game game, int row, int column) {
+        this.game = game;
+        this.row = row;
+        this.column = column;
+
         initComponents();
     }
 
@@ -43,8 +50,33 @@ public class ChessPointPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public void update() {
+        if (game.getJudge().isChessExist(getRow(), getColumn(), ChessColor.BLACK)) {
+            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackchesspointimage.png")));
+        } else if (game.getJudge().isChessExist(getRow(), getColumn(), ChessColor.WHITE)) {
+            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/whitechesspointimage.png")));
+        }
+    }
+
+    private Game game;
+    private int row;
+    private int column;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel chessPointLabel;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the row
+     */
+    public int getRow() {
+        return row;
+    }
+
+    /**
+     * @return the column
+     */
+    public int getColumn() {
+        return column;
+    }
 }

@@ -5,11 +5,16 @@
  */
 package nz.ac.aut.gui;
 
+import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import nz.ac.aut.model.GameEventListener;
 import nz.ac.aut.model.Game;
 import nz.ac.aut.model.ChessBoard;
+import nz.ac.aut.model.ChessColor;
+import nz.ac.aut.model.ChessPoint;
 
 /**
  *
@@ -27,6 +32,8 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         initializeChessBoard();
 
         game.setGameEventListener(this);
+
+        update();
     }
 
     /**
@@ -48,6 +55,9 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gomoku");
+        setPreferredSize(new java.awt.Dimension(620, 660));
+        setResizable(false);
+        setSize(new java.awt.Dimension(620, 660));
 
         panelContent.setLayout(new java.awt.BorderLayout());
 
@@ -92,6 +102,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelContent.add(panelControl, java.awt.BorderLayout.PAGE_END);
 
         panelChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelChessBoard.setPreferredSize(new java.awt.Dimension(528, 528));
 
         javax.swing.GroupLayout panelChessBoardLayout = new javax.swing.GroupLayout(panelChessBoard);
         panelChessBoard.setLayout(panelChessBoardLayout);
@@ -134,17 +145,48 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     }
 
     private void update() {
+        // update each chess point panel
+        Component[] components = panelChessBoard.getComponents();
 
+        for (Component comp : components) {
+            ChessPointPanel cpp = (ChessPointPanel) comp;
+            cpp.update();
+        }
+
+        // update the panelControl info
     }
 
     private void initializeChessBoard() {
         panelChessBoard.setLayout(new GridLayout(ChessBoard.NUM_OF_ROWS, ChessBoard.NUM_OF_COLS));
 
         for (int row = 0; row < ChessBoard.NUM_OF_ROWS; row++) {
-            for (int col = 0; col < ChessBoard.NUM_OF_COLS; col++) {
-                panelChessBoard.add(new ChessPointPanel());
+            for (int column = 0; column < ChessBoard.NUM_OF_COLS; column++) {
+                ChessPointPanel cpp = new ChessPointPanel(game, row, column);
+
+                cpp.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent evt) {
+                        mouseClickedActionPerformed(evt);
+                    }
+                });
+
+                panelChessBoard.add(cpp);
             }
         }
+    }
+
+    private void mouseClickedActionPerformed(MouseEvent evt) {
+        ChessPointPanel cpp = (ChessPointPanel)evt.getSource();
+        
+        System.out.println(evt.getSource());
+        int row = cpp.getRow();
+        int column = cpp.getColumn();
+        System.out.println(row+column);
+        ChessColor cc = game.getJudge().isBlackTurn() ? ChessColor.BLACK : ChessColor.WHITE;
+        
+        ChessPoint cp = new ChessPoint(row, column, cc);
+        
+        game.placeChessPoint(cp);
     }
 
     private Game game;

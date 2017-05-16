@@ -76,7 +76,7 @@ public class Judge {
      * @param chessPoint The current chess point to be checked.
      * @return True - if game over or False - if not game over.
      */
-    private boolean isWinnerAfterTheCurrentChessPoint(ChessPoint chessPoint) {
+    public boolean isWinnerAfterTheCurrentChessPoint(ChessPoint chessPoint) {
         boolean result = false;
 
         // The initial value for the total number of chess points to be counted in a line should be one, since there is 
@@ -137,7 +137,7 @@ public class Judge {
      * @param direction The direction to which the number of continuous chess points will be counted.
      * @return The number of continuous chess points to that direction for the chess points with that color.
      */
-    private int findChessPointToADirection(ChessPoint chessPoint, Direction direction) {
+    public int findChessPointToADirection(ChessPoint chessPoint, Direction direction) {
         int numberOfChessPointsFound = 0;
         int xPositionOfChessPoint = chessPoint.getX();
         int yPositionOfChessPoint = chessPoint.getY();
@@ -238,7 +238,7 @@ public class Judge {
      * @param y The y position of the chess point.
      * @return TURE - if there is a chess point in that position. FALSE - if there is no chess point in that position.
      */
-    private boolean isChessExist(int x, int y) {
+    public boolean isChessExist(int x, int y) {
         boolean result = false;
 
         int xPositionOfChessPoint;
@@ -266,7 +266,7 @@ public class Judge {
      * @param chessColor The color of the chess point
      * @return TURE - if there is a chess point with that color. FALSE - if there is no chess point with that color
      */
-    private boolean isChessExist(int x, int y, ChessColor chessColor) {
+    public boolean isChessExist(int x, int y, ChessColor chessColor) {
         boolean result = false;
 
         int xPositionOfChessPoint;
