@@ -46,10 +46,10 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         panelContent = new javax.swing.JPanel();
         panelControl = new javax.swing.JPanel();
-        scoreBlack = new javax.swing.JLabel();
-        scoreWhite = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        scoreBlack = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        scoreWhite = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         panelChessBoard = new javax.swing.JPanel();
 
@@ -61,46 +61,32 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         panelContent.setLayout(new java.awt.BorderLayout());
 
-        scoreBlack.setText("jLabel1");
-
-        scoreWhite.setText("jLabel2");
-
-        jLabel3.setText(":");
+        panelControl.setBackground(new java.awt.Color(255, 255, 255));
+        panelControl.setLayout(new java.awt.GridLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("jLabel1");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
+        panelControl.add(jLabel1);
+
+        scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        scoreBlack.setText("scoreBlack");
+        panelControl.add(scoreBlack);
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText(":");
+        panelControl.add(jLabel3);
+
+        scoreWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        scoreWhite.setText("scoreWhite");
+        panelControl.add(scoreWhite);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("jLabel2");
-
-        javax.swing.GroupLayout panelControlLayout = new javax.swing.GroupLayout(panelControl);
-        panelControl.setLayout(panelControlLayout);
-        panelControlLayout.setHorizontalGroup(
-            panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelControlLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scoreBlack)
-                .addGap(141, 141, 141)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
-                .addComponent(scoreWhite)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        panelControlLayout.setVerticalGroup(
-            panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scoreBlack))
-            .addGroup(panelControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scoreWhite)
-                .addComponent(jLabel3))
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white.png"))); // NOI18N
+        panelControl.add(jLabel2);
 
         panelContent.add(panelControl, java.awt.BorderLayout.PAGE_END);
 
+        panelChessBoard.setBackground(new java.awt.Color(255, 255, 255));
         panelChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelChessBoard.setPreferredSize(new java.awt.Dimension(528, 528));
 
@@ -108,11 +94,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelChessBoard.setLayout(panelChessBoardLayout);
         panelChessBoardLayout.setHorizontalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 526, Short.MAX_VALUE)
+            .addGap(0, 744, Short.MAX_VALUE)
         );
         panelChessBoardLayout.setVerticalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 658, Short.MAX_VALUE)
+            .addGap(0, 641, Short.MAX_VALUE)
         );
 
         panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);

@@ -36,7 +36,7 @@ public class ChessPointPanel extends javax.swing.JPanel {
         chessPointLabel = new javax.swing.JLabel();
 
         chessPointLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/chesspointimage.png"))); // NOI18N
+        chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/empty_chess_point.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
