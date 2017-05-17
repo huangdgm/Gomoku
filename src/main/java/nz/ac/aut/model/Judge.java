@@ -5,85 +5,33 @@
  */
 package nz.ac.aut.model;
 
-import java.util.ArrayList;
-
 /**
- * This class serves as the 'judge' class, which can check the following conditions:
+ * This class serves as the 'judge' class, which can check the following
+ * conditions:
  *
- * 1. Who win the game? 2. Is it black's turn for the current chess point? 3. Game over or not?
+ * 1. Who win the game? 2. Is it black's turn for the current chess point? 3.
+ * Game over or not?
  *
  * @author Dong Huang
  */
 public class Judge {
 
-    /**
-     * @return the blackTurn
-     */
-    public boolean isBlackTurn() {
-        return blackTurn;
-    }
-
-    /**
-     * @param blackTurn the blackTurn to set
-     */
-    public void setBlackTurn(boolean blackTurn) {
-        this.blackTurn = blackTurn;
-    }
-
-    /**
-     * @return the blackWin
-     */
-    public boolean isBlackWin() {
-        return blackWin;
-    }
-
-    /**
-     * @param blackWin the blackWin to set
-     */
-    public void setBlackWin(boolean blackWin) {
-        this.blackWin = blackWin;
-    }
-
-    /**
-     * @return the whiteWin
-     */
-    public boolean isWhiteWin() {
-        return whiteWin;
-    }
-
-    /**
-     * @param whiteWin the whiteWin to set
-     */
-    public void setWhiteWin(boolean whiteWin) {
-        this.whiteWin = whiteWin;
-    }
-
-    /**
-     * @return the chessBoard
-     */
-    public ChessBoard getChessBoard() {
-        return chessBoard;
-    }
-
-    /**
-     * @param chessBoard the chessBoard to set
-     */
-    public void setChessBoard(ChessBoard chessBoard) {
-        this.chessBoard = chessBoard;
-    }
-
+    private ChessBoard chessBoard;
+    
     private boolean blackTurn;
     private boolean blackWin;
     private boolean whiteWin;
-    private ChessBoard chessBoard;
+    private int scoreBlack;
+    private int scoreWhite;
 
     // To control the game, all the information the judge should know is the current chess board.
     public Judge(ChessBoard chessBoard) {
         // According to Gomoku's rule, black player comes first
         blackTurn = true;
-
         // At the beginning of the game, no player wins the game.
         blackWin = false;
+        scoreBlack = 0;
+        scoreWhite = 0;
 
         this.chessBoard = chessBoard;
     }
@@ -91,10 +39,12 @@ public class Judge {
     /**
      * To check whether the current chess point meets the following criteria:
      *
-     * 1. The chess point falls into the scope of the chess board; 2. There is no chess point in the same position.
+     * 1. The chess point falls into the scope of the chess board; 2. There is
+     * no chess point in the same position.
      *
      * @param currentChessPoint The chess point to be checked.
-     * @return True - if the chess point is valid or False - if the chess point is invalid.
+     * @return True - if the chess point is valid or False - if the chess point
+     * is invalid.
      */
     public boolean isChessPointValid(ChessPoint currentChessPoint) {
         boolean result = true;
@@ -108,7 +58,6 @@ public class Judge {
 
         //System.out.println(x + " : " + y + " : " + currentChessPoint.getChessColor());
         //System.out.println(isChessExist(x, y) || x < 0 || x > 15 || y < 0 || y > 15);
-
         return result;
     }
 
@@ -181,20 +130,29 @@ public class Judge {
         // If any of the direction has 5 or more continuous points with the same color, then there's a winner.
         if (numberOfChessPointsInARow >= 5 || numberOfChessPointsInAColumn >= 5 || numberOfChessPointsInENWS >= 5 || numberOfChessPointsInESWN >= 5) {
             result = true;
+            
             // Set the flag whether the black player wins or the white player wins.
-            setBlackWin(currentChessPoint.getChessColor() == ChessColor.BLACK ? true : false);
-            setWhiteWin(currentChessPoint.getChessColor() == ChessColor.WHITE ? true : false);
+            if(currentChessPoint.getChessColor() == ChessColor.BLACK) {
+                setBlackWin(true);
+                setScoreBlack(++scoreBlack);
+            } else if(currentChessPoint.getChessColor() == ChessColor.WHITE) {
+                setWhiteWin(true);
+                setScoreWhite(++scoreWhite);
+            }
         }
 
         return result;
     }
 
     /**
-     * Count the number of continuous chess points to a specific direction for a specific color.
+     * Count the number of continuous chess points to a specific direction for a
+     * specific color.
      *
      * @param currentChessPoint The current chess point.
-     * @param direction The direction to which the number of continuous chess points will be counted.
-     * @return The number of continuous chess points to that direction for the chess points with that color.
+     * @param direction The direction to which the number of continuous chess
+     * points will be counted.
+     * @return The number of continuous chess points to that direction for the
+     * chess points with that color.
      */
     public int findChessPointToADirection(ChessPoint currentChessPoint, Direction direction) {
         int numberOfChessPointsFound = 0;
@@ -295,7 +253,8 @@ public class Judge {
      *
      * @param x The x position of the chess point.
      * @param y The y position of the chess point.
-     * @return TURE - if there is a chess point in that position. FALSE - if there is no chess point in that position.
+     * @return TURE - if there is a chess point in that position. FALSE - if
+     * there is no chess point in that position.
      */
     public boolean isChessExist(int x, int y) {
         boolean result = false;
@@ -318,12 +277,14 @@ public class Judge {
     }
 
     /**
-     * To check whether there is a chess point with a specific color existing in a position.
+     * To check whether there is a chess point with a specific color existing in
+     * a position.
      *
      * @param x The x position of the chess point
      * @param y The y position of the chess point
      * @param chessColor The color of the chess point
-     * @return TURE - if there is a chess point with that color. FALSE - if there is no chess point with that color
+     * @return TURE - if there is a chess point with that color. FALSE - if
+     * there is no chess point with that color
      */
     public boolean isChessExist(int x, int y, ChessColor chessColor) {
         boolean result = false;
@@ -345,5 +306,89 @@ public class Judge {
         }
 
         return result;
+    }
+
+    /**
+     * @return the scoreBlack
+     */
+    public int getScoreBlack() {
+        return scoreBlack;
+    }
+
+    /**
+     * @param scoreBlack the scoreBlack to set
+     */
+    public void setScoreBlack(int scoreBlack) {
+        this.scoreBlack = scoreBlack;
+    }
+
+    /**
+     * @return the scoreWhite
+     */
+    public int getScoreWhite() {
+        return scoreWhite;
+    }
+
+    /**
+     * @param scoreWhite the scoreWhite to set
+     */
+    public void setScoreWhite(int scoreWhite) {
+        this.scoreWhite = scoreWhite;
+    }
+    
+    /**
+     * @return the blackTurn
+     */
+    public boolean isBlackTurn() {
+        return blackTurn;
+    }
+
+    /**
+     * @param blackTurn the blackTurn to set
+     */
+    public void setBlackTurn(boolean blackTurn) {
+        this.blackTurn = blackTurn;
+    }
+
+    /**
+     * @return the blackWin
+     */
+    public boolean isBlackWin() {
+        return blackWin;
+    }
+
+    /**
+     * @param blackWin the blackWin to set
+     */
+    public void setBlackWin(boolean blackWin) {
+        this.blackWin = blackWin;
+    }
+
+    /**
+     * @return the whiteWin
+     */
+    public boolean isWhiteWin() {
+        return whiteWin;
+    }
+
+    /**
+     * @param whiteWin the whiteWin to set
+     */
+    public void setWhiteWin(boolean whiteWin) {
+        this.whiteWin = whiteWin;
+    }
+
+    /**
+     * @return the chessBoard
+     */
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
+
+    /**
+     * @param chessBoard the chessBoard to set
+     */
+    public void setChessBoard(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
     }
 }

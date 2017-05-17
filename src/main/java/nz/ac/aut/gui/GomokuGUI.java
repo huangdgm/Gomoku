@@ -62,22 +62,24 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelContent.setLayout(new java.awt.BorderLayout());
 
         panelControl.setBackground(new java.awt.Color(255, 255, 255));
-        panelControl.setLayout(new java.awt.GridLayout());
+        panelControl.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
         panelControl.add(jLabel1);
 
+        scoreBlack.setFont(new java.awt.Font("宋体", 0, 18)); // NOI18N
         scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        scoreBlack.setText("scoreBlack");
+        scoreBlack.setText("0");
         panelControl.add(scoreBlack);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText(":");
         panelControl.add(jLabel3);
 
+        scoreWhite.setFont(new java.awt.Font("宋体", 0, 18)); // NOI18N
         scoreWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        scoreWhite.setText("scoreWhite");
+        scoreWhite.setText("0");
         panelControl.add(scoreWhite);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -125,12 +127,16 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                             this,
                             "Black wins!", "Game over",
                             JOptionPane.INFORMATION_MESSAGE);
+                    
+                    scoreBlack.setText(String.valueOf(game.getJudge().getScoreBlack()));
                     game.createNewGame();
                 } else if (game.getJudge().isWhiteWin()) {
                     JOptionPane.showMessageDialog(
                             this,
                             "White wins!", "Game over",
                             JOptionPane.INFORMATION_MESSAGE);
+                    
+                    scoreWhite.setText(String.valueOf(game.getJudge().getScoreWhite()));
                     game.createNewGame();
                 }
             }

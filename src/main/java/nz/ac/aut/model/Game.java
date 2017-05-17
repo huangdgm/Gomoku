@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The Game class serves as the controller of the whole game. It defines the process of the game and validate the user
- * input.
+ * The Game class serves as the controller of the whole game. It defines the
+ * process of the game and validate the user input.
  *
  * @author Dong Huang
  */
@@ -18,34 +18,25 @@ public class Game {
 
     private ChessBoard chessBoard;
     private Judge judge;
+
     private GameEventListener gameEventListener;
     private boolean currentChessPointValid;
 
     /**
-     * A Game consists of 3 elements: 1. ChessBoard; 2. A collection of ChessPoint; 3. A judge;
+     * A Game consists of 3 elements: 1. ChessBoard; 2. A collection of
+     * ChessPoint; 3. A judge;
      */
     public Game() {
         super();
 
-        createNewGame();
-    }
-
-    /**
-     * The main process the game should follow.
-     */
-    public void startGame() {
-        Scanner scanner = new Scanner(System.in);
-
         initializeGame();
-        playGame();
-
-        scanner.close();
     }
 
     /**
-     * After the game has been initialized, the game starts and the playGame method controls the process of the game.
-     * Each color plays alternatively. After each chess point, the judge checks whether it is game over. If it is game
-     * over, the judge can tell which color win the game.
+     * After the game has been initialized, the game starts and the playGame
+     * method controls the process of the game. Each color plays alternatively.
+     * After each chess point, the judge checks whether it is game over. If it
+     * is game over, the judge can tell which color win the game.
      *
      * @param scanner
      */
@@ -53,11 +44,27 @@ public class Game {
     }
 
     /**
-     * Initialize the game by prompting the user whether the user want to start a new game or load history progress
-     * information. If the user want to load history progress information, then the desired text file will be loaded and
-     * be used to populate the chess board. Also, it validates the user input.
+     * Initialize the game by prompting the user whether the user want to start
+     * a new game or load history progress information. If the user want to load
+     * history progress information, then the desired text file will be loaded
+     * and be used to populate the chess board. Also, it validates the user
+     * input.
      */
     private void initializeGame() {
+        // Create a new empty chess point collection
+        ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
+
+        // Create a new chess board based on the empty chess point collection
+        chessBoard = new ChessBoard(chessPointCollection);
+
+        // Make the judge to return to the original status
+        judge = new Judge(chessBoard);
+
+        // Reset the flag to true
+        setCurrentChessPointValid(true);
+
+        // Notify the game event listener to update the GUI
+        notifyGameEventListener();
     }
 
     /**
@@ -107,8 +114,10 @@ public class Game {
         // Create a new chess board based on the empty chess point collection
         chessBoard = new ChessBoard(chessPointCollection);
 
-        // Create a new judge based on the 
-        judge = new Judge(chessBoard);
+        // Make use of the original judge, and make the judge to return to the original status
+        judge.setChessBoard(chessBoard);
+        judge.setBlackTurn(true);
+        judge.setBlackWin(false);
 
         // Reset the flag to true
         setCurrentChessPointValid(true);
