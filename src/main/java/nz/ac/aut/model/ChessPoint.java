@@ -6,8 +6,7 @@
 package nz.ac.aut.model;
 
 /**
- * The ChessPoint consists of the chess point attributes - coordinate and the
- * chess color.
+ * The ChessPoint consists of the chess point attributes - coordinate and the chess color.
  *
  * @author Dong Huang
  */
@@ -19,7 +18,7 @@ public class ChessPoint {
 
     public ChessPoint(int x, int y, ChessColor chessColor) {
         super();
-        
+
         this.x = x;
         this.y = y;
         this.chessColor = chessColor;
@@ -47,5 +46,10 @@ public class ChessPoint {
 
     public void setChessColor(ChessColor chessColor) {
         this.chessColor = chessColor;
+    }
+
+    @Override
+    public String toString() {
+        return x + " : " + y + " : " + chessColor;
     }
 }

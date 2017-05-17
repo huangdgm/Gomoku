@@ -16,19 +16,74 @@ import java.util.ArrayList;
  */
 public class Judge {
 
-    private boolean isBlackTurn;
-    private boolean isBlackWin;
-    private boolean gameOver;
+    /**
+     * @return the blackTurn
+     */
+    public boolean isBlackTurn() {
+        return blackTurn;
+    }
+
+    /**
+     * @param blackTurn the blackTurn to set
+     */
+    public void setBlackTurn(boolean blackTurn) {
+        this.blackTurn = blackTurn;
+    }
+
+    /**
+     * @return the blackWin
+     */
+    public boolean isBlackWin() {
+        return blackWin;
+    }
+
+    /**
+     * @param blackWin the blackWin to set
+     */
+    public void setBlackWin(boolean blackWin) {
+        this.blackWin = blackWin;
+    }
+
+    /**
+     * @return the whiteWin
+     */
+    public boolean isWhiteWin() {
+        return whiteWin;
+    }
+
+    /**
+     * @param whiteWin the whiteWin to set
+     */
+    public void setWhiteWin(boolean whiteWin) {
+        this.whiteWin = whiteWin;
+    }
+
+    /**
+     * @return the chessBoard
+     */
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
+
+    /**
+     * @param chessBoard the chessBoard to set
+     */
+    public void setChessBoard(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
+    }
+
+    private boolean blackTurn;
+    private boolean blackWin;
+    private boolean whiteWin;
     private ChessBoard chessBoard;
 
     // To control the game, all the information the judge should know is the current chess board.
     public Judge(ChessBoard chessBoard) {
         // According to Gomoku's rule, black player comes first
-        isBlackTurn = true;
+        blackTurn = true;
 
         // At the beginning of the game, no player wins the game.
-        isBlackWin = false;
-        gameOver = false;
+        blackWin = false;
 
         this.chessBoard = chessBoard;
     }
@@ -38,18 +93,21 @@ public class Judge {
      *
      * 1. The chess point falls into the scope of the chess board; 2. There is no chess point in the same position.
      *
-     * @param chessPoint The chess point to be checked.
+     * @param currentChessPoint The chess point to be checked.
      * @return True - if the chess point is valid or False - if the chess point is invalid.
      */
-    public boolean isChessPointValid(ChessPoint chessPoint) {
+    public boolean isChessPointValid(ChessPoint currentChessPoint) {
         boolean result = true;
 
-        int x = chessPoint.getX();
-        int y = chessPoint.getY();
+        int x = currentChessPoint.getX();
+        int y = currentChessPoint.getY();
 
         if (isChessExist(x, y) || x < 0 || x > 15 || y < 0 || y > 15) {
             result = false;
         }
+
+        //System.out.println(x + " : " + y + " : " + currentChessPoint.getChessColor());
+        //System.out.println(isChessExist(x, y) || x < 0 || x > 15 || y < 0 || y > 15);
 
         return result;
     }
@@ -57,13 +115,13 @@ public class Judge {
     /**
      * To check whether it is game over after the current chess point.
      *
-     * @param chessPoint The current chess point to be checked.
+     * @param currentChessPoint The current chess point to be checked.
      * @return True - if game over or False - if not game over.
      */
-    public boolean isGameOver(ChessPoint chessPoint) {
+    public boolean isGameOver(ChessPoint currentChessPoint) {
         boolean result = false;
 
-        if (isWinnerAfterTheCurrentChessPoint(chessPoint)) {
+        if (currentChessPoint != null && isWinnerAfterTheCurrentChessPoint(currentChessPoint)) {
             result = true;
         }
 
@@ -73,10 +131,10 @@ public class Judge {
     /**
      * To check whether it is game over after the current chess point.
      *
-     * @param chessPoint The current chess point to be checked.
+     * @param currentChessPoint The current chess point to be checked.
      * @return True - if game over or False - if not game over.
      */
-    public boolean isWinnerAfterTheCurrentChessPoint(ChessPoint chessPoint) {
+    public boolean isWinnerAfterTheCurrentChessPoint(ChessPoint currentChessPoint) {
         boolean result = false;
 
         // The initial value for the total number of chess points to be counted in a line should be one, since there is 
@@ -97,25 +155,25 @@ public class Judge {
         for (Direction direction : Direction.values()) {
             // Count the number of chess points in a row.
             if (direction == Direction.EAST || direction == Direction.WEST) {
-                numberOfChessPointsFoundHorizontally = findChessPointToADirection(chessPoint, direction);
+                numberOfChessPointsFoundHorizontally = findChessPointToADirection(currentChessPoint, direction);
                 numberOfChessPointsInARow += numberOfChessPointsFoundHorizontally;
             }
 
             // Count the number of chess points in a column.
             if (direction == Direction.SOUTH || direction == Direction.NORTH) {
-                numberOfChessPointsFoundVertically = findChessPointToADirection(chessPoint, direction);
+                numberOfChessPointsFoundVertically = findChessPointToADirection(currentChessPoint, direction);
                 numberOfChessPointsInAColumn += numberOfChessPointsFoundVertically;
             }
 
             // Count the number of chess points in the northeast and the southwest direction.
             if (direction == Direction.EAST_NORTH || direction == Direction.WEST_SOUTH) {
-                numberOfChessPointsFoundENWS = findChessPointToADirection(chessPoint, direction);
+                numberOfChessPointsFoundENWS = findChessPointToADirection(currentChessPoint, direction);
                 numberOfChessPointsInENWS += numberOfChessPointsFoundENWS;
             }
 
             // Count the number of chess points in the southeast and the northwest direction.
             if (direction == Direction.EAST_SOUTH || direction == Direction.WEST_NORTH) {
-                numberOfChessPointsFoundESWN = findChessPointToADirection(chessPoint, direction);
+                numberOfChessPointsFoundESWN = findChessPointToADirection(currentChessPoint, direction);
                 numberOfChessPointsInESWN += numberOfChessPointsFoundESWN;
             }
         }
@@ -124,7 +182,8 @@ public class Judge {
         if (numberOfChessPointsInARow >= 5 || numberOfChessPointsInAColumn >= 5 || numberOfChessPointsInENWS >= 5 || numberOfChessPointsInESWN >= 5) {
             result = true;
             // Set the flag whether the black player wins or the white player wins.
-            setBlackWin(chessPoint.getChessColor() == ChessColor.BLACK ? true : false);
+            setBlackWin(currentChessPoint.getChessColor() == ChessColor.BLACK ? true : false);
+            setWhiteWin(currentChessPoint.getChessColor() == ChessColor.WHITE ? true : false);
         }
 
         return result;
@@ -133,15 +192,15 @@ public class Judge {
     /**
      * Count the number of continuous chess points to a specific direction for a specific color.
      *
-     * @param chessPoint The current chess point.
+     * @param currentChessPoint The current chess point.
      * @param direction The direction to which the number of continuous chess points will be counted.
      * @return The number of continuous chess points to that direction for the chess points with that color.
      */
-    public int findChessPointToADirection(ChessPoint chessPoint, Direction direction) {
+    public int findChessPointToADirection(ChessPoint currentChessPoint, Direction direction) {
         int numberOfChessPointsFound = 0;
-        int xPositionOfChessPoint = chessPoint.getX();
-        int yPositionOfChessPoint = chessPoint.getY();
-        ChessColor chessColor = chessPoint.getChessColor();
+        int xPositionOfChessPoint = currentChessPoint.getX();
+        int yPositionOfChessPoint = currentChessPoint.getY();
+        ChessColor chessColor = currentChessPoint.getChessColor();
 
         // Count the number of chess points to a specific direction based on the
         // current chess point color.
@@ -244,7 +303,7 @@ public class Judge {
         int xPositionOfChessPoint;
         int yPositionOfChessPoint;
 
-        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
+        for (ChessPoint chessPoint : getChessBoard().getChessPointCollection()) {
             if (chessPoint != null) {
                 xPositionOfChessPoint = chessPoint.getX();
                 yPositionOfChessPoint = chessPoint.getY();
@@ -273,7 +332,7 @@ public class Judge {
         int yPositionOfChessPoint;
         ChessColor colorOfChessPoint;
 
-        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
+        for (ChessPoint chessPoint : getChessBoard().getChessPointCollection()) {
             if (chessPoint != null) {
                 xPositionOfChessPoint = chessPoint.getX();
                 yPositionOfChessPoint = chessPoint.getY();
@@ -286,29 +345,5 @@ public class Judge {
         }
 
         return result;
-    }
-
-    public boolean isBlackTurn() {
-        return isBlackTurn;
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public void setBlackTurn(boolean isBlackTurn) {
-        this.isBlackTurn = isBlackTurn;
-    }
-
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
-    public boolean isBlackWin() {
-        return isBlackWin;
-    }
-
-    public void setBlackWin(boolean isBlackWin) {
-        this.isBlackWin = isBlackWin;
     }
 }

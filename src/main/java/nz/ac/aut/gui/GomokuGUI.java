@@ -126,20 +126,27 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     public void gameStateChanged() {
         update();
 
-        // Pop up a dialog to show who wins
-        if (game.getJudge().isGameOver()) {
-            if (game.getJudge().isBlackWin()) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Black wins!", "Game over!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                game.createNewGame();
-            } else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "White wins!", "Game over!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                game.createNewGame();
+        if (!game.isCurrentChessPointValid()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "The chess point you just played is not valid.", "Warning",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Pop up a dialog to show who wins
+            if (game.getJudge().isGameOver(game.getChessBoard().getCurrentChessPoint())) {
+                if (game.getJudge().isBlackWin()) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Black wins!", "Game over",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    game.createNewGame();
+                } else if (game.getJudge().isWhiteWin()) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "White wins!", "Game over",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    game.createNewGame();
+                }
             }
         }
     }
@@ -163,6 +170,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
             for (int column = 0; column < ChessBoard.NUM_OF_COLS; column++) {
                 ChessPointPanel cpp = new ChessPointPanel(game, row, column);
 
+                // Add a mouse listener for all the chess point panel
                 cpp.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent evt) {
@@ -170,23 +178,25 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                     }
                 });
 
+                // Addd all the chess point panel to the chess board
                 panelChessBoard.add(cpp);
             }
         }
     }
 
     private void mouseClickedActionPerformed(MouseEvent evt) {
-        ChessPointPanel cpp = (ChessPointPanel)evt.getSource();
-        
-        System.out.println(evt.getSource());
+        // Create a new chess point panel after the mouse click
+        ChessPointPanel cpp = (ChessPointPanel) evt.getSource();
+
         int row = cpp.getRow();
         int column = cpp.getColumn();
-        System.out.println(row+column);
+
         ChessColor cc = game.getJudge().isBlackTurn() ? ChessColor.BLACK : ChessColor.WHITE;
-        
-        ChessPoint cp = new ChessPoint(row, column, cc);
-        
-        game.placeChessPoint(cp);
+        ChessPoint currentChessPoint = new ChessPoint(row, column, cc);
+
+        System.out.println(currentChessPoint);
+
+        game.placeChessPoint(currentChessPoint);
     }
 
     private Game game;

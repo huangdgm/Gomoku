@@ -19,6 +19,7 @@ public class Game {
     private ChessBoard chessBoard;
     private Judge judge;
     private GameEventListener gameEventListener;
+    private boolean currentChessPointValid;
 
     /**
      * A Game consists of 3 elements: 1. ChessBoard; 2. A collection of ChessPoint; 3. A judge;
@@ -62,15 +63,23 @@ public class Game {
     /**
      * Read a valid chess point by prompting the user with the proper message.
      *
-     * @param scanner
      * @param chessColor
      * @return The chess point which the player just plays.
      */
-    public void placeChessPoint(ChessPoint cp) {
-        chessBoard.getChessPointCollection().add(cp);
-
-        // Check who should play the next chess point after playing the current chess point on the chess board, 
-        judge.setBlackTurn(cp.getChessColor() == ChessColor.BLACK ? false : true);
+    public void placeChessPoint(ChessPoint currentChessPoint) {
+        if (judge.isChessPointValid(currentChessPoint)) {
+            // Reset the flag to true once the current chess point is valid
+            setCurrentChessPointValid(true);
+            // Set the current chess point
+            chessBoard.setCurrentChessPoint(currentChessPoint);
+            // Add the current chess point to the chess point collection
+            chessBoard.getChessPointCollection().add(currentChessPoint);
+            // Check who should play the next chess point after playing the current chess point
+            judge.setBlackTurn(currentChessPoint.getChessColor() == ChessColor.BLACK ? false : true);
+        } else {
+            // If the current chess point is not valid, then just set the flag to false and do nothing else.
+            setCurrentChessPointValid(false);
+        }
 
         notifyGameEventListener();
     }
@@ -95,14 +104,14 @@ public class Game {
         // Create a new empty chess point collection
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
 
-        chessPointCollection.add(new ChessPoint(2, 3, ChessColor.BLACK));
-        chessPointCollection.add(new ChessPoint(5, 6, ChessColor.WHITE));
-
         // Create a new chess board based on the empty chess point collection
         chessBoard = new ChessBoard(chessPointCollection);
 
         // Create a new judge based on the 
         judge = new Judge(chessBoard);
+
+        // Reset the flag to true
+        setCurrentChessPointValid(true);
 
         // Notify the game event listener to update the GUI
         notifyGameEventListener();
@@ -126,5 +135,19 @@ public class Game {
      */
     public void setGameEventListener(GameEventListener gameEventListener) {
         this.gameEventListener = gameEventListener;
+    }
+
+    /**
+     * @return the isCurrentChessPointValid
+     */
+    public boolean isCurrentChessPointValid() {
+        return currentChessPointValid;
+    }
+
+    /**
+     * @param isCurrentChessPointValid the isCurrentChessPointValid to set
+     */
+    public void setCurrentChessPointValid(boolean isCurrentChessPointValid) {
+        this.currentChessPointValid = isCurrentChessPointValid;
     }
 }

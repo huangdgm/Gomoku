@@ -21,10 +21,15 @@ public class ChessBoard {
     public static final int NUM_OF_ROWS = 15;
     public static final int NUM_OF_COLS = 15;
 
+    // All the chess points on the chess board
     private ArrayList<ChessPoint> chessPointCollection;
+    // The current chess point just played
+    private ChessPoint currentChessPoint;
 
     public ChessBoard(ArrayList<ChessPoint> chessPointCollection) {
         this.chessPointCollection = chessPointCollection;
+        // When the game starts, there is no current chess point.
+        currentChessPoint = null;
     }
 
     /**
@@ -127,5 +132,19 @@ public class ChessBoard {
 
     public void setChessPointCollection(ArrayList<ChessPoint> chessPointCollection) {
         this.chessPointCollection = chessPointCollection;
+    }
+
+    /**
+     * @return the currentChessPoint
+     */
+    public ChessPoint getCurrentChessPoint() {
+        return currentChessPoint;
+    }
+
+    /**
+     * @param currentChessPoint the currentChessPoint to set
+     */
+    public void setCurrentChessPoint(ChessPoint currentChessPoint) {
+        this.currentChessPoint = currentChessPoint;
     }
 }

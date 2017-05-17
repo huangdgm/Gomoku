@@ -50,11 +50,14 @@ public class ChessPointPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // Update the chess point label image based on the existence of the type of the chess point
     public void update() {
         if (game.getJudge().isChessExist(getRow(), getColumn(), ChessColor.BLACK)) {
-            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackchesspointimage.png")));
+            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black_chess_point.png")));
         } else if (game.getJudge().isChessExist(getRow(), getColumn(), ChessColor.WHITE)) {
-            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/whitechesspointimage.png")));
+            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white_chess_point.png")));
+        } else {
+            chessPointLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/empty_chess_point.png")));
         }
     }
 
