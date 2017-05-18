@@ -68,16 +68,17 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
         panelControl.add(jLabel1);
 
-        scoreBlack.setFont(new java.awt.Font("宋体", 0, 18)); // NOI18N
+        scoreBlack.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreBlack.setText("0");
         panelControl.add(scoreBlack);
 
+        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText(":");
         panelControl.add(jLabel3);
 
-        scoreWhite.setFont(new java.awt.Font("宋体", 0, 18)); // NOI18N
+        scoreWhite.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         scoreWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreWhite.setText("0");
         panelControl.add(scoreWhite);
@@ -89,18 +90,17 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelContent.add(panelControl, java.awt.BorderLayout.PAGE_END);
 
         panelChessBoard.setBackground(new java.awt.Color(255, 255, 255));
-        panelChessBoard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelChessBoard.setPreferredSize(new java.awt.Dimension(528, 528));
 
         javax.swing.GroupLayout panelChessBoardLayout = new javax.swing.GroupLayout(panelChessBoard);
         panelChessBoard.setLayout(panelChessBoardLayout);
         panelChessBoardLayout.setHorizontalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 744, Short.MAX_VALUE)
+            .addGap(0, 746, Short.MAX_VALUE)
         );
         panelChessBoardLayout.setVerticalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 641, Short.MAX_VALUE)
+            .addGap(0, 643, Short.MAX_VALUE)
         );
 
         panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);
