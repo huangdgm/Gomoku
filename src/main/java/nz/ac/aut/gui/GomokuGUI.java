@@ -52,12 +52,27 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         scoreWhite = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         panelChessBoard = new javax.swing.JPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuNewGame = new javax.swing.JMenuItem();
+        jMenuOpenGame = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuExit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuHelpContents = new javax.swing.JMenuItem();
+        jMenuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gomoku");
-        setPreferredSize(new java.awt.Dimension(620, 660));
+        setPreferredSize(new java.awt.Dimension(620, 680));
         setResizable(false);
-        setSize(new java.awt.Dimension(620, 660));
+        setSize(new java.awt.Dimension(620, 680));
 
         panelContent.setLayout(new java.awt.BorderLayout());
 
@@ -68,7 +83,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
         panelControl.add(jLabel1);
 
-        scoreBlack.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        scoreBlack.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreBlack.setText("0");
         panelControl.add(scoreBlack);
@@ -78,7 +93,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         jLabel3.setText(":");
         panelControl.add(jLabel3);
 
-        scoreWhite.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        scoreWhite.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         scoreWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreWhite.setText("0");
         panelControl.add(scoreWhite);
@@ -100,12 +115,60 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         );
         panelChessBoardLayout.setVerticalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 643, Short.MAX_VALUE)
+            .addGap(0, 523, Short.MAX_VALUE)
         );
 
         panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(panelContent, java.awt.BorderLayout.CENTER);
+
+        jMenu1.setText("File");
+
+        jMenuNewGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuNewGame.setText("New Game");
+        jMenu1.add(jMenuNewGame);
+
+        jMenuOpenGame.setText("Open Game");
+
+        jMenuItem2.setText("jMenuItem2");
+        jMenuOpenGame.add(jMenuItem2);
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenuOpenGame.add(jMenuItem3);
+
+        jMenuItem4.setText("jMenuItem4");
+        jMenuOpenGame.add(jMenuItem4);
+
+        jMenuItem5.setText("jMenuItem5");
+        jMenuOpenGame.add(jMenuItem5);
+
+        jMenuItem6.setText("jMenuItem6");
+        jMenuOpenGame.add(jMenuItem6);
+
+        jMenu1.add(jMenuOpenGame);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Save Game");
+        jMenu1.add(jMenuItem1);
+        jMenu1.add(jSeparator1);
+
+        jMenuExit.setText("Exit");
+        jMenu1.add(jMenuExit);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+
+        jMenuHelpContents.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuHelpContents.setText("Help Contents");
+        jMenu2.add(jMenuHelpContents);
+
+        jMenuAbout.setText("About");
+        jMenu2.add(jMenuAbout);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -197,6 +260,21 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuAbout;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuExit;
+    private javax.swing.JMenuItem jMenuHelpContents;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuNewGame;
+    private javax.swing.JMenu jMenuOpenGame;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPanel panelChessBoard;
     private javax.swing.JPanel panelContent;
     private javax.swing.JPanel panelControl;
