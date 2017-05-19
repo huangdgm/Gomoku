@@ -18,12 +18,14 @@ import nz.ac.aut.model.ChessPoint;
 
 /**
  *
- * @author xfn
+ * @author Dong Huang
  */
 public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
     /**
      * Creates new form GomokuGUI
+     *
+     * @param game
      */
     public GomokuGUI(Game game) {
         this.game = game;
@@ -50,21 +52,16 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         panelContent = new javax.swing.JPanel();
         panelControl = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        iconBlack = new javax.swing.JLabel();
         scoreBlack = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        iconColon = new javax.swing.JLabel();
         scoreWhite = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        iconWhite = new javax.swing.JLabel();
         panelChessBoard = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemNewGame = new javax.swing.JMenuItem();
         menuOpenGame = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
         menuItemSaveGame = new javax.swing.JMenuItem();
         menuItemSeparator = new javax.swing.JPopupMenu.Separator();
         menuItemExit = new javax.swing.JMenuItem();
@@ -74,7 +71,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gomoku");
-        setPreferredSize(new java.awt.Dimension(620, 680));
+        setPreferredSize(new java.awt.Dimension(800, 920));
         setResizable(false);
         setSize(new java.awt.Dimension(620, 680));
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -89,28 +86,28 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelControl.setBackground(new java.awt.Color(255, 255, 255));
         panelControl.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
-        panelControl.add(jLabel1);
+        iconBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconBlack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
+        panelControl.add(iconBlack);
 
         scoreBlack.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreBlack.setText("0");
         panelControl.add(scoreBlack);
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText(":");
-        panelControl.add(jLabel3);
+        iconColon.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        iconColon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconColon.setText(":");
+        panelControl.add(iconColon);
 
         scoreWhite.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         scoreWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreWhite.setText("0");
         panelControl.add(scoreWhite);
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white.png"))); // NOI18N
-        panelControl.add(jLabel2);
+        iconWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconWhite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white.png"))); // NOI18N
+        panelControl.add(iconWhite);
 
         panelContent.add(panelControl, java.awt.BorderLayout.PAGE_END);
 
@@ -121,11 +118,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelChessBoard.setLayout(panelChessBoardLayout);
         panelChessBoardLayout.setHorizontalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 746, Short.MAX_VALUE)
+            .addGap(0, 385, Short.MAX_VALUE)
         );
         panelChessBoardLayout.setVerticalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addGap(0, 376, Short.MAX_VALUE)
         );
 
         panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);
@@ -144,22 +141,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuFile.add(menuItemNewGame);
 
         menuOpenGame.setText("Open Game");
-
-        jMenuItem2.setText("jMenuItem2");
-        menuOpenGame.add(jMenuItem2);
-
-        jMenuItem3.setText("jMenuItem3");
-        menuOpenGame.add(jMenuItem3);
-
-        jMenuItem4.setText("jMenuItem4");
-        menuOpenGame.add(jMenuItem4);
-
-        jMenuItem5.setText("jMenuItem5");
-        menuOpenGame.add(jMenuItem5);
-
-        jMenuItem6.setText("jMenuItem6");
-        menuOpenGame.add(jMenuItem6);
-
         menuFile.add(menuOpenGame);
 
         menuItemSaveGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -225,10 +206,17 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
             switch (userChoice) {
                 case JOptionPane.YES_OPTION:
-                    game.saveGame();
+                    String tableName = JOptionPane.showInputDialog(
+                            this,
+                            "Please input a name.",
+                            "Question",
+                            JOptionPane.OK_CANCEL_OPTION);
+
+                    game.saveGame(tableName);
+                    addNewMenuItem(tableName);
                     game.createNewGame();
                     update();
-                    
+
                     break;
                 case JOptionPane.NO_OPTION:
                     game.createNewGame();
@@ -255,13 +243,20 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
             switch (userChoice) {
                 case JOptionPane.YES_OPTION:
-                    game.saveGame();
+                    String tableName = JOptionPane.showInputDialog(
+                            this,
+                            "Please input a name.",
+                            "Question",
+                            JOptionPane.OK_CANCEL_OPTION);
+
+                    game.saveGame(tableName);
+                    addNewMenuItem(tableName);
                     this.dispose();
-                    
+
                     break;
                 case JOptionPane.NO_OPTION:
                     this.dispose();
-                    
+
                     break;
                 case JOptionPane.CANCEL_OPTION:
                     break;
@@ -353,17 +348,12 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         game.placeChessPoint(currentChessPoint);
     }
 
-    private Game game;
+    private final Game game;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JLabel iconBlack;
+    private javax.swing.JLabel iconColon;
+    private javax.swing.JLabel iconWhite;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
@@ -381,4 +371,12 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private javax.swing.JLabel scoreWhite;
     // End of variables declaration//GEN-END:variables
 
+    private void addNewMenuItem(String tableName) {
+        javax.swing.JMenuItem newMenuItem = new javax.swing.JMenuItem();
+        
+        newMenuItem.setText(tableName);
+        menuOpenGame.add(newMenuItem);
+        
+        menuBar.revalidate();
+    }
 }

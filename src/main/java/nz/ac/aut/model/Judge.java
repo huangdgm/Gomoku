@@ -52,7 +52,7 @@ public class Judge {
         int x = currentChessPoint.getX();
         int y = currentChessPoint.getY();
 
-        if (isChessExist(x, y) || x < 0 || x > 15 || y < 0 || y > 15) {
+        if (isChessExist(x, y) || x < 0 || x > ChessBoard.NUM_OF_COLS || y < 0 || y > ChessBoard.NUM_OF_ROWS) {
             result = false;
         }
 

@@ -14,15 +14,20 @@ import java.util.ArrayList;
  * @author Dong Huang
  */
 public class Game {
+    
+    public final String URL = "jdbc:derby://localhost:1527/jvb4600";
+    public final String USERNAME = "pdc";
+    public final String PASSWORD = "123";
 
     private ChessBoard chessBoard;
     private Judge judge;
+    private DBManager databaseManager;
 
     private GameEventListener gameEventListener;
     private boolean currentChessPointValid;
 
     /**
-     * A Game consists of 2 elements: 1. ChessBoard; 2. A judge;
+     * A Game consists of 2 elements: 1. ChessBoard; 2. A judge; 3. A DB manager.
      */
     public Game() {
         super();
@@ -51,6 +56,9 @@ public class Game {
     private void initializeGame() {
         // Create a new empty chess point collection
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
+        
+        // Create a DB manager for storing persisting data
+        setDatabaseManager(new DBManager(URL, USERNAME, PASSWORD));
 
         // Create a new chess board based on the empty chess point collection
         chessBoard = new ChessBoard(chessPointCollection);
@@ -121,7 +129,9 @@ public class Game {
         notifyGameEventListener();
     }
     
-    public void saveGame() {
+    public void saveGame(String tableName) {
+        getDatabaseManager().connectDB();
+        getDatabaseManager().createAndPopulateTableFromChessBoard(tableName, chessBoard);
     }
     
     public boolean isChessBoardEmpty() {
@@ -160,5 +170,19 @@ public class Game {
      */
     public void setCurrentChessPointValid(boolean isCurrentChessPointValid) {
         this.currentChessPointValid = isCurrentChessPointValid;
+    }
+
+    /**
+     * @return the databaseManager
+     */
+    public DBManager getDatabaseManager() {
+        return databaseManager;
+    }
+
+    /**
+     * @param databaseManager the databaseManager to set
+     */
+    public void setDatabaseManager(DBManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 }

@@ -18,9 +18,9 @@ import java.util.ArrayList;
  */
 public class ChessBoard {
 
-    public static final int NUM_OF_ROWS = 15;
-    public static final int NUM_OF_COLS = 15;
-
+    public static final int NUM_OF_ROWS = 19;
+    public static final int NUM_OF_COLS = 19;
+    
     // All the chess points on the chess board
     private ArrayList<ChessPoint> chessPointCollection;
     // The current chess point just played
