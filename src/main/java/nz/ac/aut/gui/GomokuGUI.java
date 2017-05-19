@@ -184,13 +184,43 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
-        this.dispose();
+        int userChoice;
+
+        if (!game.isChessBoardEmpty()) {
+            userChoice = JOptionPane.showConfirmDialog(
+                    this,
+                    "The game is currently going. Save?",
+                    "Question",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+
+            switch (userChoice) {
+                case JOptionPane.YES_OPTION:
+                    String tableName = JOptionPane.showInputDialog(
+                            this,
+                            "Please input a name.",
+                            "Question",
+                            JOptionPane.OK_CANCEL_OPTION);
+
+                    if (tableName != null) {
+                        game.saveGame(tableName);
+                        this.dispose();
+                    }
+
+                    break;
+                case JOptionPane.NO_OPTION:
+                    this.dispose();
+
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    break;
+            }
+        }
     }//GEN-LAST:event_menuItemExitActionPerformed
 
     private void menuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAboutActionPerformed
         JOptionPane.showMessageDialog(
                 this,
-                "Gomoku - v1.1\n\nAuthor: Dong Huang\nEmail:   huangdgm@gmail.com",
+                "Gomoku v1.2\n\nAuthor: Dong Huang\nEmail: huangdgm@gmail.com",
                 "About",
                 JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_menuItemAboutActionPerformed
@@ -200,7 +230,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         if (game.isChessBoardEmpty()) {
             game.createNewGame();
-            update();
+            gameStateChanged();
         } else {
             userChoice = JOptionPane.showConfirmDialog(
                     this,
@@ -216,15 +246,17 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                             "Question",
                             JOptionPane.OK_CANCEL_OPTION);
 
-                    game.saveGame(tableName);
-                    addNewMenuItem(tableName);
-                    game.createNewGame();
-                    update();
+                    if (tableName != null) {
+                        game.saveGame(tableName);
+                        addNewMenuItem(tableName);
+                        game.createNewGame();
+                        gameStateChanged();
+                    }
 
                     break;
                 case JOptionPane.NO_OPTION:
                     game.createNewGame();
-                    update();
+                    gameStateChanged();
 
                     break;
                 case JOptionPane.CANCEL_OPTION:
@@ -253,9 +285,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                             "Question",
                             JOptionPane.OK_CANCEL_OPTION);
 
-                    game.saveGame(tableName);
-                    addNewMenuItem(tableName);
-                    this.dispose();
+                    if (tableName != null) {
+                        game.saveGame(tableName);
+                        addNewMenuItem(tableName);
+                        this.dispose();
+                    }
 
                     break;
                 case JOptionPane.NO_OPTION:
@@ -331,15 +365,17 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                                         "Question",
                                         JOptionPane.OK_CANCEL_OPTION);
 
-                                game.saveGame(tableName);
-                                addNewMenuItem(tableName);
-                                
-                                ResultSet rs = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
-                                ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
-                                game.getChessBoard().getChessPointCollection().clear();
-                                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
-                                gameStateChanged();
-                                
+                                if (tableName != null) {
+                                    game.saveGame(tableName);
+                                    addNewMenuItem(tableName);
+
+                                    ResultSet rs = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
+                                    ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
+                                    game.getChessBoard().getChessPointCollection().clear();
+                                    game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+                                    gameStateChanged();
+                                }
+
                                 break;
                             case JOptionPane.NO_OPTION:
                                 ResultSet rs1 = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
@@ -347,7 +383,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                                 game.getChessBoard().getChessPointCollection().clear();
                                 game.getChessBoard().getChessPointCollection().addAll(chessPointCollection1);
                                 gameStateChanged();
-                                
+
                                 break;
                             case JOptionPane.CANCEL_OPTION:
                                 break;
@@ -413,6 +449,28 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         game.placeChessPoint(currentChessPoint);
     }
 
+    private void addNewMenuItem(String tableName) {
+        javax.swing.JMenuItem newMenuItem = new javax.swing.JMenuItem();
+
+        newMenuItem.setText(tableName);
+
+        newMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResultSet rs = game.getDatabaseManager().getResultSetFromTable(tableName);
+                ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
+                game.getChessBoard().getChessPointCollection().clear();
+                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+                gameStateChanged();
+            }
+        });
+
+        menuOpenGame.add(newMenuItem);
+
+        // Repaint the menu bar after adding a new menu item
+        menuBar.revalidate();
+    }
+
     private final Game game;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -435,24 +493,4 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private javax.swing.JLabel scoreWhite;
     // End of variables declaration//GEN-END:variables
 
-    private void addNewMenuItem(String tableName) {
-        javax.swing.JMenuItem newMenuItem = new javax.swing.JMenuItem();
-
-        newMenuItem.setText(tableName);
-
-        newMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResultSet rs = game.getDatabaseManager().getResultSetFromTable(tableName);
-                ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
-                game.getChessBoard().getChessPointCollection().clear();
-                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
-                gameStateChanged();
-            }
-        });
-
-        menuOpenGame.add(newMenuItem);
-
-        menuBar.revalidate();
-    }
 }
