@@ -72,11 +72,16 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuItemHelpContents = new javax.swing.JMenuItem();
         menuItemAbout = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gomoku");
         setPreferredSize(new java.awt.Dimension(620, 680));
         setResizable(false);
         setSize(new java.awt.Dimension(620, 680));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         panelContent.setPreferredSize(new java.awt.Dimension(528, 660));
         panelContent.setLayout(new java.awt.BorderLayout());
@@ -206,7 +211,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     }//GEN-LAST:event_menuItemAboutActionPerformed
 
     private void menuItemNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNewGameActionPerformed
-        int userChoice = 0;
+        int userChoice;
 
         if (game.isChessBoardEmpty()) {
             game.createNewGame();
@@ -235,6 +240,34 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
             }
         }
     }//GEN-LAST:event_menuItemNewGameActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int userChoice;
+
+        if (game.isChessBoardEmpty()) {
+            this.dispose();
+        } else {
+            userChoice = JOptionPane.showConfirmDialog(
+                    this,
+                    "The game is currently going. Save?",
+                    "Question",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+
+            switch (userChoice) {
+                case JOptionPane.YES_OPTION:
+                    game.saveGame();
+                    this.dispose();
+                    
+                    break;
+                case JOptionPane.NO_OPTION:
+                    this.dispose();
+                    
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    break;
+            }
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     @Override
     public void gameStateChanged() {
