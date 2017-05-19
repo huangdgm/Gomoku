@@ -17,7 +17,7 @@ package nz.ac.aut.model;
 public class Judge {
 
     private ChessBoard chessBoard;
-    
+
     private boolean blackTurn;
     private boolean blackWin;
     private boolean whiteWin;
@@ -130,12 +130,12 @@ public class Judge {
         // If any of the direction has 5 or more continuous points with the same color, then there's a winner.
         if (numberOfChessPointsInARow >= 5 || numberOfChessPointsInAColumn >= 5 || numberOfChessPointsInENWS >= 5 || numberOfChessPointsInESWN >= 5) {
             result = true;
-            
+
             // Set the flag whether the black player wins or the white player wins.
-            if(currentChessPoint.getChessColor() == ChessColor.BLACK) {
+            if (currentChessPoint.getChessColor() == ChessColor.BLACK) {
                 setBlackWin(true);
                 setScoreBlack(++scoreBlack);
-            } else if(currentChessPoint.getChessColor() == ChessColor.WHITE) {
+            } else if (currentChessPoint.getChessColor() == ChessColor.WHITE) {
                 setWhiteWin(true);
                 setScoreWhite(++scoreWhite);
             }
@@ -308,6 +308,16 @@ public class Judge {
         return result;
     }
 
+    public boolean isChessBoardEmpty() {
+        boolean result = false;
+
+        if (chessBoard.getChessPointCollection().isEmpty()) {
+            result = true;
+        }
+
+        return result;
+    }
+
     /**
      * @return the scoreBlack
      */
@@ -335,7 +345,7 @@ public class Judge {
     public void setScoreWhite(int scoreWhite) {
         this.scoreWhite = scoreWhite;
     }
-    
+
     /**
      * @return the blackTurn
      */

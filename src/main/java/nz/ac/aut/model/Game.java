@@ -6,7 +6,6 @@
 package nz.ac.aut.model;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * The Game class serves as the controller of the whole game. It defines the
@@ -23,8 +22,7 @@ public class Game {
     private boolean currentChessPointValid;
 
     /**
-     * A Game consists of 3 elements: 1. ChessBoard; 2. A collection of
-     * ChessPoint; 3. A judge;
+     * A Game consists of 2 elements: 1. ChessBoard; 2. A judge;
      */
     public Game() {
         super();
@@ -60,7 +58,7 @@ public class Game {
         // Make the judge to return to the original status
         judge = new Judge(chessBoard);
 
-        // Reset the flag to true
+        // At the beginning of a new game, there is no chess point on the board.
         setCurrentChessPointValid(true);
 
         // Notify the game event listener to update the GUI
@@ -70,8 +68,7 @@ public class Game {
     /**
      * Read a valid chess point by prompting the user with the proper message.
      *
-     * @param chessColor
-     * @return The chess point which the player just plays.
+     * @param currentChessPoint
      */
     public void placeChessPoint(ChessPoint currentChessPoint) {
         if (judge.isChessPointValid(currentChessPoint)) {
@@ -82,7 +79,7 @@ public class Game {
             // Add the current chess point to the chess point collection
             chessBoard.getChessPointCollection().add(currentChessPoint);
             // Check who should play the next chess point after playing the current chess point
-            judge.setBlackTurn(currentChessPoint.getChessColor() == ChessColor.BLACK ? false : true);
+            judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
         } else {
             // If the current chess point is not valid, then just set the flag to false and do nothing else.
             setCurrentChessPointValid(false);
@@ -108,13 +105,11 @@ public class Game {
     }
 
     public void createNewGame() {
-        // Create a new empty chess point collection
-        ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
+        // Clear the existing chess board and reset the current chess point to null.
+        chessBoard.getChessPointCollection().clear();
+        chessBoard.setCurrentChessPoint(null);
 
-        // Create a new chess board based on the empty chess point collection
-        chessBoard = new ChessBoard(chessPointCollection);
-
-        // Make use of the original judge, and make the judge to return to the original status
+        // Make use of the existing judge, and make the judge to return to the original status
         judge.setChessBoard(chessBoard);
         judge.setBlackTurn(true);
         judge.setBlackWin(false);
@@ -125,7 +120,14 @@ public class Game {
         // Notify the game event listener to update the GUI
         notifyGameEventListener();
     }
-
+    
+    public void saveGame() {
+    }
+    
+    public boolean isChessBoardEmpty() {
+        return judge.isChessBoardEmpty();
+    }
+    
     private void notifyGameEventListener() {
         if (gameEventListener != null) {
             getGameEventListener().gameStateChanged();
