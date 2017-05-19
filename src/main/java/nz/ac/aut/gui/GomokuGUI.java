@@ -7,8 +7,12 @@ package nz.ac.aut.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import nz.ac.aut.model.GameEventListener;
@@ -63,7 +67,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuFile = new javax.swing.JMenu();
         menuItemNewGame = new javax.swing.JMenuItem();
         menuOpenGame = new javax.swing.JMenu();
-        menuItemSaveGame = new javax.swing.JMenuItem();
         menuItemSeparator = new javax.swing.JPopupMenu.Separator();
         menuItemExit = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
@@ -147,10 +150,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         addExistingGameToMenuOpenGame();
 
         menuFile.add(menuOpenGame);
-
-        menuItemSaveGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        menuItemSaveGame.setText("Save Game");
-        menuFile.add(menuItemSaveGame);
         menuFile.add(menuItemSeparator);
 
         menuItemExit.setText("Exit");
@@ -301,10 +300,63 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     }
 
     private void addExistingGameToMenuOpenGame() {
-        for (String menuItemName : game.getDatabaseManager().convertResultSetToTableNameCollection(game.getDatabaseManager().getAllTableNames())) {
-            JMenuItem menuItem = new JMenuItem();
-            menuItem.setText(menuItemName);
-            menuOpenGame.add(menuItem);
+        for (String existingMenuItemName : game.getDatabaseManager().convertResultSetToTableNameCollection(game.getDatabaseManager().getAllTableNames())) {
+            JMenuItem existingMenuItem = new JMenuItem();
+            existingMenuItem.setText(existingMenuItemName);
+
+            existingMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // If there is one or more chess points on the chess board, prompt the user to save it.
+                    int userChoice;
+
+                    if (game.isChessBoardEmpty()) {
+                        ResultSet rs = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
+                        ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
+                        game.getChessBoard().getChessPointCollection().clear();
+                        game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+                        gameStateChanged();
+                    } else {
+                        userChoice = JOptionPane.showConfirmDialog(
+                                GomokuGUI.this,
+                                "The game is currently going. Save?",
+                                "Question",
+                                JOptionPane.YES_NO_CANCEL_OPTION);
+
+                        switch (userChoice) {
+                            case JOptionPane.YES_OPTION:
+                                String tableName = JOptionPane.showInputDialog(
+                                        GomokuGUI.this,
+                                        "Please input a name.",
+                                        "Question",
+                                        JOptionPane.OK_CANCEL_OPTION);
+
+                                game.saveGame(tableName);
+                                addNewMenuItem(tableName);
+                                
+                                ResultSet rs = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
+                                ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
+                                game.getChessBoard().getChessPointCollection().clear();
+                                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+                                gameStateChanged();
+                                
+                                break;
+                            case JOptionPane.NO_OPTION:
+                                ResultSet rs1 = game.getDatabaseManager().getResultSetFromTable(existingMenuItemName);
+                                ArrayList<ChessPoint> chessPointCollection1 = game.getDatabaseManager().convertResultSetToChessPointCollection(rs1);
+                                game.getChessBoard().getChessPointCollection().clear();
+                                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection1);
+                                gameStateChanged();
+                                
+                                break;
+                            case JOptionPane.CANCEL_OPTION:
+                                break;
+                        }
+                    }
+                }
+            });
+
+            menuOpenGame.add(existingMenuItem);
         }
     }
 
@@ -374,7 +426,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private javax.swing.JMenuItem menuItemExit;
     private javax.swing.JMenuItem menuItemHelpContents;
     private javax.swing.JMenuItem menuItemNewGame;
-    private javax.swing.JMenuItem menuItemSaveGame;
     private javax.swing.JPopupMenu.Separator menuItemSeparator;
     private javax.swing.JMenu menuOpenGame;
     private javax.swing.JPanel panelChessBoard;
@@ -388,6 +439,18 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         javax.swing.JMenuItem newMenuItem = new javax.swing.JMenuItem();
 
         newMenuItem.setText(tableName);
+
+        newMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResultSet rs = game.getDatabaseManager().getResultSetFromTable(tableName);
+                ArrayList<ChessPoint> chessPointCollection = game.getDatabaseManager().convertResultSetToChessPointCollection(rs);
+                game.getChessBoard().getChessPointCollection().clear();
+                game.getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+                gameStateChanged();
+            }
+        });
+
         menuOpenGame.add(newMenuItem);
 
         menuBar.revalidate();

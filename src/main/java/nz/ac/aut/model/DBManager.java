@@ -31,7 +31,7 @@ public class DBManager {
         this.url = url;
         this.username = username;
         this.password = password;
-        
+
         // The connection is established when the DBManager instance is created.
         connectDB();
     }
@@ -120,15 +120,17 @@ public class DBManager {
         int y = -1;
 
         try {
-            x = rs.getInt("X");
-            y = rs.getInt("Y");
-            chessColor = rs.getString("COLOR").equals("BLACK") ? ChessColor.BLACK : ChessColor.WHITE;
+            while (rs.next()) {
+                x = rs.getInt("X");
+                y = rs.getInt("Y");
+                chessColor = rs.getString("COLOR").equals("BLACK") ? ChessColor.BLACK : ChessColor.WHITE;
+                
+                chessPoint = new ChessPoint(x, y, chessColor);
+                chessPointCollection.add(chessPoint);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        chessPoint = new ChessPoint(x, y, chessColor);
-        chessPointCollection.add(chessPoint);
 
         return chessPointCollection;
     }

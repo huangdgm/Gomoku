@@ -28,14 +28,6 @@
                 <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="// Add the existing game in the database to the menu&#xa;addExistingGameToMenuOpenGame();"/>
               </AuxValues>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="menuItemSaveGame">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+S"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Save Game"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="menuItemSeparator">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemExit">
