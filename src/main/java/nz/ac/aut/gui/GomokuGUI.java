@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import nz.ac.aut.model.GameEventListener;
 import nz.ac.aut.model.Game;
@@ -141,6 +142,10 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuFile.add(menuItemNewGame);
 
         menuOpenGame.setText("Open Game");
+
+        // Add the existing game in the database to the menu
+        addExistingGameToMenuOpenGame();
+
         menuFile.add(menuOpenGame);
 
         menuItemSaveGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -295,6 +300,14 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         }
     }
 
+    private void addExistingGameToMenuOpenGame() {
+        for (String menuItemName : game.getDatabaseManager().convertResultSetToTableNameCollection(game.getDatabaseManager().getAllTableNames())) {
+            JMenuItem menuItem = new JMenuItem();
+            menuItem.setText(menuItemName);
+            menuOpenGame.add(menuItem);
+        }
+    }
+
     /**
      * Update the GUI of chess board and score result.
      */
@@ -373,10 +386,10 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
     private void addNewMenuItem(String tableName) {
         javax.swing.JMenuItem newMenuItem = new javax.swing.JMenuItem();
-        
+
         newMenuItem.setText(tableName);
         menuOpenGame.add(newMenuItem);
-        
+
         menuBar.revalidate();
     }
 }

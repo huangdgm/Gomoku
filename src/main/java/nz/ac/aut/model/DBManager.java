@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,11 +26,14 @@ public class DBManager {
     String url;
     String username;
     String password;
-    
+
     public DBManager(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
+        
+        // The connection is established when the DBManager instance is created.
+        connectDB();
     }
 
     public void connectDB() {
@@ -64,22 +68,21 @@ public class DBManager {
     public void createAndPopulateTableFromChessBoard(String tableName, ChessBoard chessBoard) {
         //Create the table:
         String createTableSQL = "CREATE TABLE " + tableName + " (X INT, Y INT, COLOR VARCHAR(5))";
-         
+
         Statement stmt = null;
-         
+
         try {
             stmt = conn.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
- 
+
         try {
             stmt.executeUpdate(createTableSQL);
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         // Insert value into table
         PreparedStatement pstmt = null;
 
@@ -109,7 +112,7 @@ public class DBManager {
 //        }
     }
 
-    public ArrayList<ChessPoint> readResultSet(ResultSet rs) {
+    public ArrayList<ChessPoint> convertResultSetToChessPointCollection(ResultSet rs) {
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
         ChessPoint chessPoint = null;
         ChessColor chessColor = null;
@@ -128,5 +131,42 @@ public class DBManager {
         chessPointCollection.add(chessPoint);
 
         return chessPointCollection;
+    }
+
+    public ArrayList<String> convertResultSetToTableNameCollection(ResultSet rs) {
+        ArrayList<String> tableNameCollection = new ArrayList<String>();
+        String tableName = null;
+
+        try {
+            while (rs.next()) {
+                tableName = rs.getString("TABLENAME");
+                tableNameCollection.add(tableName);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return tableNameCollection;
+    }
+
+    public ResultSet getAllTableNames() {
+        String sql = "select * from SYS.SYSTABLES where TABLETYPE='T'";
+        ResultSet rs = null;
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            rs = stmt.executeQuery(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rs;
     }
 }

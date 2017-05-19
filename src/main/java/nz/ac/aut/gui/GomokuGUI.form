@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
@@ -24,6 +24,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open Game"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="// Add the existing game in the database to the menu&#xa;addExistingGameToMenuOpenGame();"/>
+              </AuxValues>
             </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemSaveGame">
               <Properties>

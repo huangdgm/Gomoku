@@ -130,7 +130,6 @@ public class Game {
     }
     
     public void saveGame(String tableName) {
-        getDatabaseManager().connectDB();
         getDatabaseManager().createAndPopulateTableFromChessBoard(tableName, chessBoard);
     }
     
