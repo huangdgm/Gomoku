@@ -8,10 +8,12 @@ package nz.ac.aut.model;
 import java.util.ArrayList;
 
 /**
- * The ChessBoard class represents the actual 15*15 chess board, and there is a collection of chess points on the board.
+ * The ChessBoard class represents the actual 15*15 chess board, and there is a
+ * collection of chess points on the board.
  *
- * A chess board has the following attributes: 1. The number of rows on the board. 2. The number of columns on the
- * board. 3. A collection of chess points on the board. These points can include a number of white points as well as
+ * A chess board has the following attributes: 1. The number of rows on the
+ * board. 2. The number of columns on the board. 3. A collection of chess points
+ * on the board. These points can include a number of white points as well as
  * black points.
  *
  * @author Dong Huang
@@ -20,7 +22,7 @@ public class ChessBoard {
 
     public static final int NUM_OF_ROWS = 19;
     public static final int NUM_OF_COLS = 19;
-    
+
     // All the chess points on the chess board
     private ArrayList<ChessPoint> chessPointCollection;
     // The current chess point just played
@@ -33,7 +35,8 @@ public class ChessBoard {
     }
 
     /**
-     * Draw the ASCII representation of the chess board based on the distribution of the current chess point collection.
+     * Draw the ASCII representation of the chess board based on the
+     * distribution of the current chess point collection.
      */
     public void drawChessBoard() {
         // The string builder serves as the string builder to print the whole chess board.
@@ -146,5 +149,11 @@ public class ChessBoard {
      */
     public void setCurrentChessPoint(ChessPoint currentChessPoint) {
         this.currentChessPoint = currentChessPoint;
+    }
+
+    // Clear all the chess points on the board and set the current chess point to null
+    public void resetChessBoardToNewGame() {
+        getChessPointCollection().clear();
+        setCurrentChessPoint(null);
     }
 }

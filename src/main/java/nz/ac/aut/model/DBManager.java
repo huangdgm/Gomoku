@@ -114,10 +114,10 @@ public class DBManager {
 
     public ArrayList<ChessPoint> convertResultSetToChessPointCollection(ResultSet rs) {
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
-        ChessPoint chessPoint = null;
-        ChessColor chessColor = null;
-        int x = -1;
-        int y = -1;
+        ChessPoint chessPoint;
+        ChessColor chessColor;
+        int x;
+        int y;
 
         try {
             while (rs.next()) {

@@ -5,16 +5,19 @@
  */
 package nz.ac.aut.model;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
  * The Game class serves as the controller of the whole game. It defines the
  * process of the game and validate the user input.
  *
+ * A Game consists of 2 elements: 1. ChessBoard; 2. A judge; 3. A DB manager.
+ *
  * @author Dong Huang
  */
 public class Game {
-    
+
     public final String URL = "jdbc:derby://localhost:1527/jvb4600";
     public final String USERNAME = "pdc";
     public final String PASSWORD = "123";
@@ -24,11 +27,7 @@ public class Game {
     private DBManager databaseManager;
 
     private GameEventListener gameEventListener;
-    private boolean currentChessPointValid;
 
-    /**
-     * A Game consists of 2 elements: 1. ChessBoard; 2. A judge; 3. A DB manager.
-     */
     public Game() {
         super();
 
@@ -36,38 +35,27 @@ public class Game {
     }
 
     /**
-     * After the game has been initialized, the game starts and the playGame
-     * method controls the process of the game. Each color plays alternatively.
-     * After each chess point, the judge checks whether it is game over. If it
-     * is game over, the judge can tell which color win the game.
+     * Initialize the game at the beginning of the start of the whole program,
+     * by creating the following elements:
      *
-     * @param scanner
-     */
-    private void playGame() {
-    }
-
-    /**
-     * Initialize the game by prompting the user whether the user want to start
-     * a new game or load history progress information. If the user want to load
-     * history progress information, then the desired text file will be loaded
-     * and be used to populate the chess board. Also, it validates the user
-     * input.
+     *
+     * 1. An empty chess point collection. 2. A database manager for handling
+     * operations related to database. 3. An empty chess board 4. A judge who
+     * controls the game.
      */
     private void initializeGame() {
         // Create a new empty chess point collection
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
-        
-        // Create a DB manager for storing persisting data
+
+        // Create a DB manager for storing persisting data.
+        // The db connection is established when the db manager is instantiated.
         setDatabaseManager(new DBManager(URL, USERNAME, PASSWORD));
 
         // Create a new chess board based on the empty chess point collection
-        chessBoard = new ChessBoard(chessPointCollection);
+        setChessBoard(new ChessBoard(chessPointCollection));
 
         // Make the judge to return to the original status
-        judge = new Judge(chessBoard);
-
-        // At the beginning of a new game, there is no chess point on the board.
-        setCurrentChessPointValid(true);
+        setJudge(new Judge(chessBoard));
 
         // Notify the game event listener to update the GUI
         notifyGameEventListener();
@@ -82,12 +70,15 @@ public class Game {
         if (judge.isChessPointValid(currentChessPoint)) {
             // Reset the flag to true once the current chess point is valid
             setCurrentChessPointValid(true);
+
             // Set the current chess point
-            chessBoard.setCurrentChessPoint(currentChessPoint);
-            // Add the current chess point to the chess point collection
-            chessBoard.getChessPointCollection().add(currentChessPoint);
+            setCurrentChessPoint(currentChessPoint);
+
+            // Add the current chess point to the chess board
+            addChessPointToChessBoard(currentChessPoint);
+
             // Check who should play the next chess point after playing the current chess point
-            judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
+            setBlackTurn(currentChessPoint);
         } else {
             // If the current chess point is not valid, then just set the flag to false and do nothing else.
             setCurrentChessPointValid(false);
@@ -114,13 +105,10 @@ public class Game {
 
     public void createNewGame() {
         // Clear the existing chess board and reset the current chess point to null.
-        chessBoard.getChessPointCollection().clear();
-        chessBoard.setCurrentChessPoint(null);
+        resetChessBoardToNewGame();
 
         // Make use of the existing judge, and make the judge to return to the original status
-        judge.setChessBoard(chessBoard);
-        judge.setBlackTurn(true);
-        judge.setBlackWin(false);
+        resetJudgeToNewGame(chessBoard);
 
         // Reset the flag to true
         setCurrentChessPointValid(true);
@@ -128,15 +116,23 @@ public class Game {
         // Notify the game event listener to update the GUI
         notifyGameEventListener();
     }
-    
+
     public void saveGame(String tableName) {
         getDatabaseManager().createAndPopulateTableFromChessBoard(tableName, chessBoard);
     }
-    
+
     public boolean isChessBoardEmpty() {
         return judge.isChessBoardEmpty();
     }
-    
+
+    public String getCurrentGameName() {
+        return judge.getCurrentGameName();
+    }
+
+    public void setCurrentGameName(String currentGameName) {
+        judge.setCurrentGameName(currentGameName);
+    }
+
     private void notifyGameEventListener() {
         if (gameEventListener != null) {
             getGameEventListener().gameStateChanged();
@@ -161,14 +157,14 @@ public class Game {
      * @return the isCurrentChessPointValid
      */
     public boolean isCurrentChessPointValid() {
-        return currentChessPointValid;
+        return judge.isCurrentChessPointValid();
     }
 
     /**
      * @param isCurrentChessPointValid the isCurrentChessPointValid to set
      */
     public void setCurrentChessPointValid(boolean isCurrentChessPointValid) {
-        this.currentChessPointValid = isCurrentChessPointValid;
+        judge.setCurrentChessPointValid(isCurrentChessPointValid);
     }
 
     /**
@@ -183,5 +179,34 @@ public class Game {
      */
     public void setDatabaseManager(DBManager databaseManager) {
         this.databaseManager = databaseManager;
+    }
+
+    public void creatGameFromTable(String tableName) {
+        ResultSet rs = getDatabaseManager().getResultSetFromTable(tableName);
+        ArrayList<ChessPoint> chessPointCollection = getDatabaseManager().convertResultSetToChessPointCollection(rs);
+
+        getChessBoard().getChessPointCollection().clear();
+        getChessBoard().getChessPointCollection().addAll(chessPointCollection);
+        setCurrentGameName(tableName);
+    }
+
+    private void resetChessBoardToNewGame() {
+        chessBoard.resetChessBoardToNewGame();
+    }
+
+    private void resetJudgeToNewGame(ChessBoard chessBoard) {
+        judge.resetJudgeToNewGame(chessBoard);
+    }
+
+    private void setCurrentChessPoint(ChessPoint currentChessPoint) {
+        chessBoard.setCurrentChessPoint(currentChessPoint);
+    }
+
+    private void addChessPointToChessBoard(ChessPoint currentChessPoint) {
+        chessBoard.getChessPointCollection().add(currentChessPoint);
+    }
+
+    private void setBlackTurn(ChessPoint currentChessPoint) {
+        judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
     }
 }

@@ -18,6 +18,10 @@ public class Judge {
 
     private ChessBoard chessBoard;
 
+    // The name of the current game
+    private String currentGameName;
+    private boolean currentChessPointValid;
+
     private boolean blackTurn;
     private boolean blackWin;
     private boolean whiteWin;
@@ -26,10 +30,20 @@ public class Judge {
 
     // To control the game, all the information the judge should know is the current chess board.
     public Judge(ChessBoard chessBoard) {
-        // According to Gomoku's rule, black player comes first
+        // When the game starts, there's no name for the name.
+        currentGameName = "unnamed";
+
+        // After the game starts, there is no current chess point on the board,
+        // however, since this status is valid, so we still set this flag to true.
+        currentChessPointValid = true;
+
+        // According to Gomoku's rule, black player plays first.
         blackTurn = true;
+
         // At the beginning of the game, no player wins the game.
         blackWin = false;
+        whiteWin = false;
+
         scoreBlack = 0;
         scoreWhite = 0;
 
@@ -70,6 +84,7 @@ public class Judge {
     public boolean isGameOver(ChessPoint currentChessPoint) {
         boolean result = false;
 
+        // Only if the current chess point is not null can the check winner method be invoked.
         if (currentChessPoint != null && isWinnerAfterTheCurrentChessPoint(currentChessPoint)) {
             result = true;
         }
@@ -400,5 +415,46 @@ public class Judge {
      */
     public void setChessBoard(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
+    }
+
+    /**
+     * @return the currentGameName
+     */
+    public String getCurrentGameName() {
+        return currentGameName;
+    }
+
+    /**
+     * @param currentGameName the currentGameName to set
+     */
+    public void setCurrentGameName(String currentGameName) {
+        this.currentGameName = currentGameName;
+    }
+
+    /**
+     * @return the currentChessPointValid
+     */
+    public boolean isCurrentChessPointValid() {
+        return currentChessPointValid;
+    }
+
+    /**
+     * @param currentChessPointValid the currentChessPointValid to set
+     */
+    public void setCurrentChessPointValid(boolean currentChessPointValid) {
+        this.currentChessPointValid = currentChessPointValid;
+    }
+
+    /**
+     * Reset the status of the judge to a new game.
+     *
+     * @param chessBoard The chess board the judge should be reset to.
+     */
+    public void resetJudgeToNewGame(ChessBoard chessBoard) {
+        setCurrentGameName("unnamed");
+        setChessBoard(chessBoard);
+        setBlackTurn(true);
+        setBlackWin(false);
+        setWhiteWin(false);
     }
 }
