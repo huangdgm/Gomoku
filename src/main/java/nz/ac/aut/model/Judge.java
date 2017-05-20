@@ -9,7 +9,7 @@ package nz.ac.aut.model;
  * This class serves as the 'judge' class, which can check the following
  * conditions:
  *
- * 1. Who win the game? 2. Is it black's turn for the current chess point? 3.
+ * 1. Who win the game? 2. Is black's turn for the current chess point? 3.
  * Game over or not?
  *
  * @author Dong Huang
@@ -18,7 +18,6 @@ public class Judge {
 
     private ChessBoard chessBoard;
 
-    // The name of the current game
     private String currentGameName;
     private boolean currentChessPointValid;
 
@@ -31,7 +30,7 @@ public class Judge {
     // To control the game, all the information the judge should know is the current chess board.
     public Judge(ChessBoard chessBoard) {
         // When the game starts, there's no name for the name.
-        currentGameName = "unnamed";
+        currentGameName = "Untitled";
 
         // After the game starts, there is no current chess point on the board,
         // however, since this status is valid, so we still set this flag to true.
@@ -451,10 +450,23 @@ public class Judge {
      * @param chessBoard The chess board the judge should be reset to.
      */
     public void resetJudgeToNewGame(ChessBoard chessBoard) {
-        setCurrentGameName("unnamed");
+        setCurrentGameName("Untitled");
         setChessBoard(chessBoard);
         setBlackTurn(true);
         setBlackWin(false);
         setWhiteWin(false);
+    }
+    
+    /**
+     * Reset the status of the judge to a new game.
+     *
+     * @param chessBoard The chess board the judge should be reset to.
+     */
+    public void resetJudgeToExistingGame(ChessBoard chessBoard) {
+//        setCurrentGameName("Untitled");
+//        setChessBoard(chessBoard);
+//        setBlackTurn(true);
+//        setBlackWin(false);
+//        setWhiteWin(false);
     }
 }

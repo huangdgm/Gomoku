@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class DBManager {
 
     Connection conn = null;
+    
     String url;
     String username;
     String password;
@@ -182,5 +183,34 @@ public class DBManager {
 //        } catch (SQLException ex) {
 //            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+    }
+
+    /**
+     * Overwrite the existing game record with the new game record.
+     * 
+     * @param tableName
+     * @param chessBoard 
+     */
+    void updateTableFromChessBoard(String tableName, ChessBoard chessBoard) {
+        clearTable(tableName);
+        insertIntoTable(tableName, chessBoard);
+    }
+
+    private void clearTable(String tableName) {
+        String deleteTableSQL = "DELETE FROM " + tableName;
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            stmt.executeUpdate(deleteTableSQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

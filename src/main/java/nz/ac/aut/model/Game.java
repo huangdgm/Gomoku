@@ -118,7 +118,15 @@ public class Game {
     }
 
     public void saveGame(String tableName) {
-        getDatabaseManager().createAndInsertIntoTableFromChessBoard(tableName, chessBoard);
+        DBManager databaseManager = getDatabaseManager();
+        ResultSet rs = databaseManager.getAllTableNames();
+        ArrayList<String> tableNamesCollection = databaseManager.convertResultSetToTableNameCollection(rs);
+
+        if (tableNamesCollection.contains(tableName.toUpperCase())) {
+            databaseManager.updateTableFromChessBoard(tableName, chessBoard);
+        } else {
+            databaseManager.createAndInsertIntoTableFromChessBoard(tableName, chessBoard);
+        }
     }
 
     public boolean isChessBoardEmpty() {
@@ -208,5 +216,11 @@ public class Game {
 
     private void setBlackTurn(ChessPoint currentChessPoint) {
         judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
+    }
+    
+    public ArrayList<String> getAllGameNames() {
+        ResultSet rs = getDatabaseManager().getAllTableNames();
+        
+        return getDatabaseManager().convertResultSetToTableNameCollection(rs);
     }
 }

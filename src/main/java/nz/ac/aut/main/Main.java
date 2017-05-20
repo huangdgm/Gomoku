@@ -5,12 +5,7 @@
  */
 package nz.ac.aut.main;
 
-import java.util.ArrayList;
-
-import nz.ac.aut.model.ChessBoard;
-import nz.ac.aut.model.ChessPoint;
 import nz.ac.aut.model.Game;
-import nz.ac.aut.model.Judge;
 import nz.ac.aut.gui.GomokuGUI;
 
 /**
