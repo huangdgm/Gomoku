@@ -118,7 +118,7 @@ public class Game {
     }
 
     public void saveGame(String tableName) {
-        getDatabaseManager().createAndPopulateTableFromChessBoard(tableName, chessBoard);
+        getDatabaseManager().createAndInsertIntoTableFromChessBoard(tableName, chessBoard);
     }
 
     public boolean isChessBoardEmpty() {

@@ -65,53 +65,16 @@ public class DBManager {
         return rs;
     }
 
-    public void createAndPopulateTableFromChessBoard(String tableName, ChessBoard chessBoard) {
-        //Create the table:
-        String createTableSQL = "CREATE TABLE " + tableName + " (X INT, Y INT, COLOR VARCHAR(5))";
-
-        Statement stmt = null;
-
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            stmt.executeUpdate(createTableSQL);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Insert value into table
-        PreparedStatement pstmt = null;
-
-        try {
-            pstmt = conn.prepareStatement("INSERT INTO " + tableName + " VALUES (?,?,?)");
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
-            try {
-                pstmt.setInt(1, chessPoint.getX());
-                pstmt.setInt(2, chessPoint.getY());
-                pstmt.setString(3, chessPoint.getChessColor().toString());
-
-                pstmt.executeUpdate();
-            } catch (SQLException ex) {
-                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-//        try {
-//            rs.close();
-//            conn.close();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+    public void createAndInsertIntoTableFromChessBoard(String tableName, ChessBoard chessBoard) {
+        createTable(tableName);
+        insertIntoTable(tableName, chessBoard);
     }
 
+    /**
+     *
+     * @param rs
+     * @return chessPointCollection
+     */
     public ArrayList<ChessPoint> convertResultSetToChessPointCollection(ResultSet rs) {
         ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
         ChessPoint chessPoint;
@@ -124,7 +87,7 @@ public class DBManager {
                 x = rs.getInt("X");
                 y = rs.getInt("Y");
                 chessColor = rs.getString("COLOR").equals("BLACK") ? ChessColor.BLACK : ChessColor.WHITE;
-                
+
                 chessPoint = new ChessPoint(x, y, chessColor);
                 chessPointCollection.add(chessPoint);
             }
@@ -170,5 +133,54 @@ public class DBManager {
         }
 
         return rs;
+    }
+
+    private void createTable(String tableName) {
+        //Create the table:
+        String createTableSQL = "CREATE TABLE " + tableName + " (X INT, Y INT, COLOR VARCHAR(5))";
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            stmt.executeUpdate(createTableSQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void insertIntoTable(String tableName, ChessBoard chessBoard) {
+        // Insert value into table
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = conn.prepareStatement("INSERT INTO " + tableName + " VALUES (?,?,?)");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (ChessPoint chessPoint : chessBoard.getChessPointCollection()) {
+            try {
+                pstmt.setInt(1, chessPoint.getX());
+                pstmt.setInt(2, chessPoint.getY());
+                pstmt.setString(3, chessPoint.getChessColor().toString());
+
+                pstmt.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+//        try {
+//            rs.close();
+//            conn.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 }

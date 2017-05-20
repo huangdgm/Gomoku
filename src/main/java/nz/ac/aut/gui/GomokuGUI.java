@@ -12,7 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import nz.ac.aut.model.GameEventListener;
@@ -368,7 +371,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         System.out.println(currentChessPoint);
     }
 
-    
     private void addNewMenuItem(String tableName) {
         JMenuItem newMenuItem = new JMenuItem();
 
@@ -385,7 +387,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         // Repaint the menu bar after adding a new menu item
         menuBar.revalidate();
     }
-    
+
     private void saveAndExit() {
         if (!game.isChessBoardEmpty()) {
             int userChoice = showSaveConfirmDialog(this);
@@ -431,12 +433,21 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
+    /**
+     * Prompt the user to input the save name.
+     * 
+     * @param parentComponent
+     * @return The user input and the time stamp as a string.
+     */
     private String showSaveInputDialog(Component parentComponent) {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+
         return JOptionPane.showInputDialog(
                 parentComponent,
                 "Please input a save name:",
                 "Question",
-                JOptionPane.OK_CANCEL_OPTION);
+                JOptionPane.OK_CANCEL_OPTION) + "_" + dateFormatter.format(date);
     }
 
     private void menuItemNewMenuItemActionPerformed(String tableName) {
