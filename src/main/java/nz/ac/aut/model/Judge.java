@@ -5,12 +5,15 @@
  */
 package nz.ac.aut.model;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
 /**
  * This class serves as the 'judge' class, which can check the following
  * conditions:
  *
- * 1. Who win the game? 2. Is black's turn for the current chess point? 3.
- * Game over or not?
+ * 1. Who win the game? 2. Is black's turn for the current chess point? 3. Game
+ * over or not?
  *
  * @author Dong Huang
  */
@@ -20,6 +23,7 @@ public class Judge {
 
     private String currentGameName;
     private boolean currentChessPointValid;
+    private boolean currentChessBoardChanged;
 
     private boolean blackTurn;
     private boolean blackWin;
@@ -36,6 +40,9 @@ public class Judge {
         // however, since this status is valid, so we still set this flag to true.
         currentChessPointValid = true;
 
+        // After the game starts, the chess board is empty and thus not changed.
+        currentChessBoardChanged = false;
+
         // According to Gomoku's rule, black player plays first.
         blackTurn = true;
 
@@ -47,6 +54,28 @@ public class Judge {
         scoreWhite = 0;
 
         this.chessBoard = chessBoard;
+    }
+
+    public void saveGame(DBManager databaseManager, String tableName) {
+        ResultSet rs = databaseManager.getAllTableNames();
+        ArrayList<String> tableNamesCollection = databaseManager.convertResultSetToTableNameCollection(rs);
+
+        // If the table name already exists in the database, then just update that table,
+        // otherwise, create a new table and insert value into that table.
+        if (tableNamesCollection.contains(tableName)) {
+            databaseManager.updateTableFromChessBoard(tableName, chessBoard);
+        } else {
+            databaseManager.createAndInsertIntoTableFromChessBoard(tableName, chessBoard);
+        }
+
+        // After saving game, the chess board is not changed unless a new chess point is placed on the board.
+        setCurrentChessBoardChanged(false);
+        setCurrentChessPointValid(true);
+
+        // If the current game has no user specified name, then update it.
+        if (getCurrentGameName().equals("Untitled")) {
+            setCurrentGameName(tableName);
+        }
     }
 
     /**
@@ -423,6 +452,12 @@ public class Judge {
         return currentGameName;
     }
 
+    public ArrayList<String> getAllGameNames(DBManager dataBManager) {
+        ResultSet rs = dataBManager.getAllTableNames();
+
+        return dataBManager.convertResultSetToTableNameCollection(rs);
+    }
+
     /**
      * @param currentGameName the currentGameName to set
      */
@@ -451,22 +486,53 @@ public class Judge {
      */
     public void resetJudgeToNewGame(ChessBoard chessBoard) {
         setCurrentGameName("Untitled");
+        setCurrentChessBoardChanged(false);
+        setCurrentChessPointValid(true);
         setChessBoard(chessBoard);
         setBlackTurn(true);
         setBlackWin(false);
         setWhiteWin(false);
+        //setScoreBlack(0);
+        //setScoreWhite(0);
     }
-    
+
     /**
      * Reset the status of the judge to a new game.
      *
      * @param chessBoard The chess board the judge should be reset to.
      */
-    public void resetJudgeToExistingGame(ChessBoard chessBoard) {
-//        setCurrentGameName("Untitled");
-//        setChessBoard(chessBoard);
-//        setBlackTurn(true);
-//        setBlackWin(false);
-//        setWhiteWin(false);
+    public void resetJudgeFromExistingGame(String currentGameName) {
+        setCurrentGameName(currentGameName);
+        setBlackTurn(getNumOfChess(chessBoard.getChessPointCollection(), ChessColor.BLACK) == getNumOfChess(chessBoard.getChessPointCollection(), ChessColor.WHITE));
+        setBlackWin(false);
+        setWhiteWin(false);
+        setCurrentChessBoardChanged(false); // After the existing game first starts, the chess board is not changed unless a new chess point is placed on the board.
+        setCurrentChessPointValid(true);
+        setScoreBlack(0);
+        setScoreWhite(0);
+    }
+
+    private int getNumOfChess(ArrayList<ChessPoint> chessPointCollection, ChessColor chessColor) {
+        int numOfChess = 0;
+
+        for (ChessPoint cp : chessPointCollection) {
+            numOfChess += (cp.getChessColor() == chessColor ? 1 : 0);
+        }
+
+        return numOfChess;
+    }
+
+    /**
+     * @return the currentChessBoardChanged
+     */
+    public boolean isCurrentChessBoardChanged() {
+        return currentChessBoardChanged;
+    }
+
+    /**
+     * @param currentChessBoardChanged the currentChessBoardChanged to set
+     */
+    public void setCurrentChessBoardChanged(boolean currentChessBoardChanged) {
+        this.currentChessBoardChanged = currentChessBoardChanged;
     }
 }

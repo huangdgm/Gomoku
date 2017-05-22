@@ -5,6 +5,7 @@
  */
 package nz.ac.aut.model;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -155,5 +156,17 @@ public class ChessBoard {
     public void resetChessBoardToNewGame() {
         getChessPointCollection().clear();
         setCurrentChessPoint(null);
+    }
+
+    void resetChessBoardFromExistingGame(DBManager databaseManager, String tableName) {
+        ResultSet rs = databaseManager.getResultSetFromTable(tableName);
+        ArrayList<ChessPoint> chessPointCollection = databaseManager.convertResultSetToChessPointCollection(rs);
+
+        System.out.println(getChessPointCollection());
+        
+        getChessPointCollection().clear();
+        getChessPointCollection().addAll(chessPointCollection);
+        
+        System.out.println(getChessPointCollection());
     }
 }

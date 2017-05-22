@@ -44,15 +44,12 @@ public class Game {
      * controls the game.
      */
     private void initializeGame() {
-        // Create a new empty chess point collection
-        ArrayList<ChessPoint> chessPointCollection = new ArrayList<ChessPoint>();
-
         // Create a DB manager for storing persisting data.
         // The db connection is established when the db manager is instantiated.
         setDatabaseManager(new DBManager(URL, USERNAME, PASSWORD));
 
         // Create a new chess board based on the empty chess point collection
-        setChessBoard(new ChessBoard(chessPointCollection));
+        setChessBoard(new ChessBoard(new ArrayList<ChessPoint>()));
 
         // Make the judge to return to the original status
         setJudge(new Judge(chessBoard));
@@ -68,20 +65,26 @@ public class Game {
      */
     public void placeChessPoint(ChessPoint currentChessPoint) {
         if (judge.isChessPointValid(currentChessPoint)) {
-            // Reset the flag to true once the current chess point is valid
+            // Reset the flag to true once the current chess point is valid.
             setCurrentChessPointValid(true);
 
-            // Set the current chess point
+            // The chess board is changed when a new chess point is place on the board.
+            setCurrentChessBoardChanged(true);
+
+            // Set the current chess point.
             setCurrentChessPoint(currentChessPoint);
 
-            // Add the current chess point to the chess board
+            // Add the current chess point to the chess board.
             addChessPointToChessBoard(currentChessPoint);
 
-            // Check who should play the next chess point after playing the current chess point
+            // Check who should play the next chess point after playing the current chess point.
             setBlackTurn(currentChessPoint);
         } else {
             // If the current chess point is not valid, then just set the flag to false and do nothing else.
             setCurrentChessPointValid(false);
+
+            // As the current chess point is invalid, so the current chess board is not changed.
+            // setCurrentChessBoardChanged(false);
         }
 
         notifyGameEventListener();
@@ -103,34 +106,22 @@ public class Game {
         this.judge = judge;
     }
 
-    public void createNewGame() {
-        // Clear the existing chess board and reset the current chess point to null.
-        resetChessBoardToNewGame();
-
-        // Make use of the existing judge, and make the judge to return to the original status
-        resetJudgeToNewGame(chessBoard);
-
-        // Reset the flag to true
-        setCurrentChessPointValid(true);
-
-        // Notify the game event listener to update the GUI
+    public void saveGame(DBManager databaseManager, String tableName) {
+        judge.saveGame(databaseManager, tableName);
+        
         notifyGameEventListener();
     }
-
-    public void saveGame(String tableName) {
-        DBManager databaseManager = getDatabaseManager();
-        ResultSet rs = databaseManager.getAllTableNames();
-        ArrayList<String> tableNamesCollection = databaseManager.convertResultSetToTableNameCollection(rs);
-
-        if (tableNamesCollection.contains(tableName.toUpperCase())) {
-            databaseManager.updateTableFromChessBoard(tableName, chessBoard);
-        } else {
-            databaseManager.createAndInsertIntoTableFromChessBoard(tableName, chessBoard);
-        }
-    }
-
+    
     public boolean isChessBoardEmpty() {
         return judge.isChessBoardEmpty();
+    }
+
+    public boolean isCurrentChessBoardChanged() {
+        return judge.isCurrentChessBoardChanged();
+    }
+
+    public void setCurrentChessBoardChanged(boolean currentChessBoardChanged) {
+        judge.setCurrentChessBoardChanged(currentChessBoardChanged);
     }
 
     public String getCurrentGameName() {
@@ -139,6 +130,12 @@ public class Game {
 
     public void setCurrentGameName(String currentGameName) {
         judge.setCurrentGameName(currentGameName);
+        
+        notifyGameEventListener();
+    }
+
+    public ArrayList<String> getAllGameNames(DBManager databaseManager) {
+        return judge.getAllGameNames(databaseManager);
     }
 
     private void notifyGameEventListener() {
@@ -189,21 +186,56 @@ public class Game {
         this.databaseManager = databaseManager;
     }
 
-    public void creatGameFromTable(String tableName) {
-        ResultSet rs = getDatabaseManager().getResultSetFromTable(tableName);
-        ArrayList<ChessPoint> chessPointCollection = getDatabaseManager().convertResultSetToChessPointCollection(rs);
+    /**
+     *
+     */
+    public void createNewGame() {
+        // Clear the existing chess board and reset the current chess point to null.
+        resetChessBoardToNewGame();
 
-        getChessBoard().getChessPointCollection().clear();
-        getChessBoard().getChessPointCollection().addAll(chessPointCollection);
-        setCurrentGameName(tableName);
+        // Make use of the existing judge, and make the judge to return to the original status
+        resetJudgeToNewGame(chessBoard);
+
+        // Notify the game event listener to update the GUI
+        notifyGameEventListener();
+    }
+
+    /**
+     * Recover an existing game from the database.
+     *
+     * @param tableName
+     */
+    public void creatExistingGameFromTable(String tableName) {
+        resetChessBoardFromExistingGame(databaseManager, tableName);
+        resetJudgeFromExistingGame(tableName);
+        
+        System.out.println("creatExistingGameFromTable");
+        
+        notifyGameEventListener();
     }
 
     private void resetChessBoardToNewGame() {
         chessBoard.resetChessBoardToNewGame();
+        
+        notifyGameEventListener();
+    }
+
+    private void resetChessBoardFromExistingGame(DBManager databaseManager, String tableName) {
+        chessBoard.resetChessBoardFromExistingGame(databaseManager, tableName);
+        
+        notifyGameEventListener();
     }
 
     private void resetJudgeToNewGame(ChessBoard chessBoard) {
         judge.resetJudgeToNewGame(chessBoard);
+        
+        notifyGameEventListener();
+    }
+
+    private void resetJudgeFromExistingGame(String currentGameName) {
+        judge.resetJudgeFromExistingGame(currentGameName);
+        
+        notifyGameEventListener();
     }
 
     private void setCurrentChessPoint(ChessPoint currentChessPoint) {
@@ -216,11 +248,5 @@ public class Game {
 
     private void setBlackTurn(ChessPoint currentChessPoint) {
         judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
-    }
-    
-    public ArrayList<String> getAllGameNames() {
-        ResultSet rs = getDatabaseManager().getAllTableNames();
-        
-        return getDatabaseManager().convertResultSetToTableNameCollection(rs);
     }
 }
