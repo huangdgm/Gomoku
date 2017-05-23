@@ -59,9 +59,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelContent = new javax.swing.JPanel();
         panelControl = new javax.swing.JPanel();
         iconBlack = new javax.swing.JLabel();
+        iconBlackTurn = new javax.swing.JLabel();
         scoreBlack = new javax.swing.JLabel();
         iconColon = new javax.swing.JLabel();
         scoreWhite = new javax.swing.JLabel();
+        iconWhiteTurn = new javax.swing.JLabel();
         iconWhite = new javax.swing.JLabel();
         panelChessBoard = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
@@ -70,7 +72,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuOpenRecentGame = new javax.swing.JMenu();
         menuItemSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuItemSave = new javax.swing.JMenuItem();
-        menuItemSaveAs = new javax.swing.JMenuItem();
         menuItemSeparator2 = new javax.swing.JPopupMenu.Separator();
         menuItemExit = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
@@ -98,6 +99,10 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         iconBlack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/black.PNG"))); // NOI18N
         panelControl.add(iconBlack);
 
+        iconBlackTurn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconBlackTurn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/left_arrow.png"))); // NOI18N
+        panelControl.add(iconBlackTurn);
+
         scoreBlack.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         scoreBlack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreBlack.setText("0");
@@ -113,6 +118,10 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         scoreWhite.setText("0");
         panelControl.add(scoreWhite);
 
+        iconWhiteTurn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconWhiteTurn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/right_arrow.png"))); // NOI18N
+        panelControl.add(iconWhiteTurn);
+
         iconWhite.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconWhite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white.png"))); // NOI18N
         panelControl.add(iconWhite);
@@ -126,11 +135,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         panelChessBoard.setLayout(panelChessBoardLayout);
         panelChessBoardLayout.setHorizontalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 385, Short.MAX_VALUE)
+            .addGap(0, 567, Short.MAX_VALUE)
         );
         panelChessBoardLayout.setVerticalGroup(
             panelChessBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+            .addGap(0, 370, Short.MAX_VALUE)
         );
 
         panelContent.add(panelChessBoard, java.awt.BorderLayout.CENTER);
@@ -167,10 +176,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
             }
         });
         menuFile.add(menuItemSave);
-
-        menuItemSaveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/white_chess_point.png"))); // NOI18N
-        menuItemSaveAs.setText("Save As...");
-        menuFile.add(menuItemSaveAs);
         menuFile.add(menuItemSeparator2);
 
         menuItemExit.setText("Exit");
@@ -186,9 +191,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         menuHelp.setText("Help");
 
         menuItemHelpContents.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        menuItemHelpContents.setIcon(new javax.swing.ImageIcon(getClass().getResource("/help_icon.png"))); // NOI18N
         menuItemHelpContents.setText("Help Contents");
         menuHelp.add(menuItemHelpContents);
 
+        menuItemAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/about_icon.png"))); // NOI18N
         menuItemAbout.setText("About");
         menuItemAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,6 +308,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         for (String existingGameName : game.getDatabaseManager().convertResultSetToTableNameCollection(game.getDatabaseManager().getAllTableNames())) {
             JMenuItem menuItemExistingGame = new JMenuItem();
             menuItemExistingGame.setText(existingGameName);
+            menuItemExistingGame.setIcon(new javax.swing.ImageIcon(getClass().getResource("/existing_game_icon.png")));
 
             menuItemExistingGame.addActionListener(new ActionListener() {
                 @Override
@@ -372,15 +380,8 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         // Update the menu item for 'save' and 'save as'
         if (game.isCurrentChessBoardChanged()) {
             menuItemSave.setEnabled(true);
-            menuItemSaveAs.setEnabled(true);
         } else {
             menuItemSave.setEnabled(false);
-
-            if (game.isChessBoardEmpty()) {
-                menuItemSaveAs.setEnabled(false);
-            } else {
-                menuItemSaveAs.setEnabled(true);
-            }
         }
 
         // Update the menu item for 'new game'
@@ -388,13 +389,19 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
             menuItemNewGame.setEnabled(false);
         } else {
             menuItemNewGame.setEnabled(true);
-            System.out.println(game.getCurrentGameName() + "false");
+        }
+        
+        // Update the arrow direction
+        if(game.isBlackTurn()) {
+            iconBlackTurn.setVisible(true);
+            iconWhiteTurn.setVisible(false);
+        } else {
+            iconBlackTurn.setVisible(false);
+            iconWhiteTurn.setVisible(true);
         }
 
         // Update the menu item for the existing games
         for (Component menuItemExistingGame : menuOpenRecentGame.getPopupMenu().getComponents()) {
-            System.out.println(((JMenuItem)menuItemExistingGame).getText());
-
             String currentGameName = game.getCurrentGameName();
             String menuItemExistingGameName = ((JMenuItem) menuItemExistingGame).getText();
 
@@ -452,6 +459,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         JMenuItem newMenuItem = new JMenuItem();
 
         newMenuItem.setText(tableName);
+        newMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/existing_game_icon.png")));
 
         // Disable the menu item representing the current game if the current game is currently going.
         if (game.getCurrentGameName().equals(newMenuItem.getText())) {
@@ -494,7 +502,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private int showSaveConfirmDialog(Component parentComponent) {
         return JOptionPane.showConfirmDialog(
                 parentComponent,
-                "The game is changed. Save?",
+                "The game '" + game.getCurrentGameName() + "' is changed. Save?",
                 "Question",
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
@@ -564,23 +572,14 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         }
     }
 
-    private void updateMenuItemExistingGame() {
-        // Update the menu item for the existing games
-        for (Component menuItemExistingGame : menuOpenRecentGame.getComponents()) {
-            if (((JMenuItem) menuItemExistingGame).getName().equalsIgnoreCase(game.getCurrentGameName())) {
-                menuItemExistingGame.setEnabled(false);
-            } else {
-                menuItemExistingGame.setEnabled(true);
-            }
-        }
-    }
-
     private final Game game;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel iconBlack;
+    private javax.swing.JLabel iconBlackTurn;
     private javax.swing.JLabel iconColon;
     private javax.swing.JLabel iconWhite;
+    private javax.swing.JLabel iconWhiteTurn;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
@@ -589,7 +588,6 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
     private javax.swing.JMenuItem menuItemHelpContents;
     private javax.swing.JMenuItem menuItemNewGame;
     private javax.swing.JMenuItem menuItemSave;
-    private javax.swing.JMenuItem menuItemSaveAs;
     private javax.swing.JPopupMenu.Separator menuItemSeparator1;
     private javax.swing.JPopupMenu.Separator menuItemSeparator2;
     private javax.swing.JMenu menuOpenRecentGame;

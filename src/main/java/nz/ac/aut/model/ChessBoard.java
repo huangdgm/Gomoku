@@ -162,11 +162,7 @@ public class ChessBoard {
         ResultSet rs = databaseManager.getResultSetFromTable(tableName);
         ArrayList<ChessPoint> chessPointCollection = databaseManager.convertResultSetToChessPointCollection(rs);
 
-        System.out.println(getChessPointCollection());
-        
         getChessPointCollection().clear();
         getChessPointCollection().addAll(chessPointCollection);
-        
-        System.out.println(getChessPointCollection());
     }
 }

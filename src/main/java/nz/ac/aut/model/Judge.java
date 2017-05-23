@@ -98,8 +98,6 @@ public class Judge {
             result = false;
         }
 
-        //System.out.println(x + " : " + y + " : " + currentChessPoint.getChessColor());
-        //System.out.println(isChessExist(x, y) || x < 0 || x > 15 || y < 0 || y > 15);
         return result;
     }
 
@@ -492,8 +490,6 @@ public class Judge {
         setBlackTurn(true);
         setBlackWin(false);
         setWhiteWin(false);
-        //setScoreBlack(0);
-        //setScoreWhite(0);
     }
 
     /**

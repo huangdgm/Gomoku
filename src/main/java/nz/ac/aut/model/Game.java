@@ -164,6 +164,10 @@ public class Game {
     public boolean isCurrentChessPointValid() {
         return judge.isCurrentChessPointValid();
     }
+    
+    public boolean isBlackTurn() {
+        return judge.isBlackTurn();
+    }
 
     /**
      * @param isCurrentChessPointValid the isCurrentChessPointValid to set
@@ -245,7 +249,7 @@ public class Game {
     private void addChessPointToChessBoard(ChessPoint currentChessPoint) {
         chessBoard.getChessPointCollection().add(currentChessPoint);
     }
-
+    
     private void setBlackTurn(ChessPoint currentChessPoint) {
         judge.setBlackTurn((currentChessPoint.getChessColor() != ChessColor.BLACK));
     }
