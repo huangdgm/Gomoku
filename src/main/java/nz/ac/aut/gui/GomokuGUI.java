@@ -146,7 +146,7 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         getContentPane().add(panelContent, java.awt.BorderLayout.CENTER);
 
-        menuFile.setText("File");
+        menuFile.setText("    File  ");
 
         menuItemNewGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         menuItemNewGame.setIcon(new javax.swing.ImageIcon(getClass().getResource("/empty_chess_point.png"))); // NOI18N
@@ -188,11 +188,11 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         menuBar.add(menuFile);
 
-        menuHelp.setText("Help");
+        menuHelp.setText("  Help    ");
 
         menuItemHelpContents.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         menuItemHelpContents.setIcon(new javax.swing.ImageIcon(getClass().getResource("/help_icon.png"))); // NOI18N
-        menuItemHelpContents.setText("Help Contents");
+        menuItemHelpContents.setText("Help Contents        ");
         menuHelp.add(menuItemHelpContents);
 
         menuItemAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/about_icon.png"))); // NOI18N
@@ -390,9 +390,9 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
         } else {
             menuItemNewGame.setEnabled(true);
         }
-        
+
         // Update the arrow direction
-        if(game.isBlackTurn()) {
+        if (game.isBlackTurn()) {
             iconBlackTurn.setVisible(true);
             iconWhiteTurn.setVisible(false);
         } else {
@@ -521,15 +521,22 @@ public class GomokuGUI extends javax.swing.JFrame implements GameEventListener {
 
         // The show input dialog will show up over and over again if the user inputs nothing and clicks ok.
         do {
+            if(userInput != null && !(userInput.matches("[a-zA-Z]+\\d*"))) {
+                JOptionPane.showMessageDialog(parentComponent, 
+                        "Invalid save name.\n(one or more chars followed by zero or more digits)", 
+                        "Warning", 
+                        JOptionPane.OK_OPTION);
+            }
+            
             userInput = JOptionPane.showInputDialog(
                     parentComponent,
-                    "Please input a save name:",
+                    "Please input a save name: (one or more chars followed by zero or more digits)",
                     "Question",
                     JOptionPane.OK_CANCEL_OPTION);
-        } while (userInput != null && userInput.length() == 0);
+        } while ((userInput != null && userInput.length() == 0) || (userInput != null && !(userInput.matches("[a-zA-Z]+\\d*"))));
 
         if (userInput == null) {
-            returnValue = null;     // If the user clicks cancel
+            returnValue = null;     // The user clicks 'cancel'
         } else {
             // Convert the letters in user input to upper case, since the database will convert the table name to all uppercase when storing table name
             returnValue = userInput.toUpperCase() + "_" + dateFormatter.format(date);
