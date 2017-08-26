@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Tue Jun 06 10:34:33 NZST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-015c-7a65-393e-00000714f148 
+on database directory C:\Users\xfn\Documents\gomoku\gomokuDB with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/C:/Users/xfn/Documents/gomoku/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_112-b15
+user.dir=C:\Users\xfn\Documents\gomoku
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

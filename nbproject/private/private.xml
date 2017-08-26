@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/Direction.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/DBManager.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/ChessBoard.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/ChessPoint.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/test/nz/ac/aut/model/JudgeTest.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/GameEventListener.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/gui/ChessPointPanel.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/Game.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/gui/GomokuGUI.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/Judge.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/main/Main.java</file>
+            <file>file:/C:/Users/xfn/Documents/gomoku/src/nz/ac/aut/model/ChessColor.java</file>
+        </group>
+    </open-files>
+</project-private>
